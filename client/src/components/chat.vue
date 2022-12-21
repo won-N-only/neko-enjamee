@@ -479,7 +479,9 @@
           return
         }
 
-        event.preventDefault()
+        if (event.isComposing === false) {
+          event.preventDefault()
+        }
         return
       }
 
@@ -495,7 +497,9 @@
       this.$accessor.chat.sendMessage(this.content)
 
       this.content = ''
-      event.preventDefault()
+      if (event.isComposing === false) {
+        event.preventDefault()
+      }
     }
   }
 </script>
