@@ -23,6 +23,6 @@ html, body {
   color:  $text-normal;
   overflow: hidden;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--window-inner-height) - 1px);
   min-width: 320px;
 }
