@@ -48,7 +48,7 @@
     right: 0;
     bottom: 0;
     max-width: 100vw;
-    max-height: 100vh;
+    max-height: calc(var(--vh, 1vh) * 100);
     flex-direction: row;
     display: flex;
 
@@ -178,6 +178,16 @@
 
     get hideControls() {
       return !!new URL(location.href).searchParams.get('cast')
+    }
+
+    mounted() {
+      // https://stackoverflow.com/a/53883824
+      let vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+      window.addEventListener('resize', () => {
+        let vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+      })
     }
 
     @Watch('hideControls', { immediate: true })

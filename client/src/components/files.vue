@@ -192,7 +192,7 @@
       margin: 10px 10px 10px 10px;
       background-color: rgba($color: #fff, $alpha: 0.05);
       border-radius: 5px;
-      max-height: 50vh;
+      max-height: calc(var(--vh, 1vh) * 50);
       overflow-y: scroll;
       overflow-x: hidden;
       scrollbar-width: thin;
