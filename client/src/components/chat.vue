@@ -46,6 +46,7 @@
         <neko-emoji v-if="emoji" @picked="onEmojiPicked" @done="emoji = false" />
         <i class="emoji-menu fas fa-laugh" @click.stop.prevent="onEmoji"></i>
       </div>
+      <input ref="hinput" type="text"/>
     </div>
   </div>
 </template>
@@ -282,6 +283,13 @@
         margin: 5px 0 10px 0;
       }
 
+      input {
+          height: 0;
+          opacity: 0;
+          font-size: 16px;
+          pointer-events: none;
+        }
+
       .text-container {
         flex: 1;
         width: 100%;
@@ -336,6 +344,7 @@
             background: $text-link;
           }
         }
+
       }
     }
   }
@@ -365,6 +374,7 @@
   })
   export default class extends Vue {
     @Ref('input') readonly _input!: HTMLTextAreaElement
+    @Ref('hinput') readonly _hinput!: HTMLInputElement
     @Ref('history') readonly _history!: HTMLElement
     @Ref('context') readonly _context!: any
 
@@ -479,9 +489,7 @@
           return
         }
 
-        if (event.isComposing === false) {
-          event.preventDefault()
-        }
+        event.preventDefault()
         return
       }
 
@@ -494,12 +502,14 @@
         return
       }
 
+      event.preventDefault()
+
+      this._hinput.focus()
+      this._input.focus()
+
       this.$accessor.chat.sendMessage(this.content)
 
       this.content = ''
-      if (event.isComposing === false) {
-        event.preventDefault()
-      }
     }
   }
 </script>
