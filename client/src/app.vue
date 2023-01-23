@@ -114,32 +114,23 @@
     }
   }
 
-  @media only screen and (max-width: 600px) {
-    #neko.expanded {
-      .neko-main {
-        transform: translateX(calc(-100% + 65px));
+  @media only screen and (max-width: 800px) {
 
-        video {
-          display: none;
-        }
-      }
+    #neko {
+      flex-direction: column;
+    }
 
-      .neko-menu {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 65px;
-        width: calc(100% - 65px);
-      }
+    .neko-main {
+      order: 1;
+    }
+
+    .neko-menu {
+      order: 2;
+      height: 60%;
+      width: 100%;
     }
   }
 
-  @media only screen and (max-width: 768px) {
-    #neko .neko-main .room-container {
-      display: none;
-    }
-  }
 </style>
 
 <script lang="ts">
