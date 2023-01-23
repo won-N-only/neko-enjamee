@@ -44,7 +44,10 @@
       <div class="text-container">
         <textarea ref="input" :placeholder="$t('send_a_message')" @keydown="onKeyDown" v-model="content" />
         <neko-emoji v-if="emoji" @picked="onEmojiPicked" @done="emoji = false" />
-        <i class="emoji-menu fas fa-laugh" @click.stop.prevent="onEmoji"></i>
+        <li>
+          <i class="emoji-menu fas fa-laugh" @click.stop.prevent="onEmoji"></i>
+          <i class="clear-button fas fa-trash" @click="clearHistory"></i>
+        </li>
       </div>
       <input ref="hinput" type="text"/>
     </div>
@@ -298,8 +301,20 @@
         border-radius: 5px;
         position: relative;
         display: flex;
+        
+        li {
+          display: inline-block;
+        }
 
         .emoji-menu {
+          width: 20px;
+          height: 20px;
+          font-size: 20px;
+          margin: 8px 5px 0 0;
+          cursor: pointer;
+        }
+
+        .clear-button {
           width: 20px;
           height: 20px;
           font-size: 20px;
@@ -425,6 +440,10 @@
     onEmoji() {
       this.emoji = !this.emoji
       this._input.focus()
+    }
+
+    clearHistory() {
+      this.history.splice(0, this.history.length)
     }
 
     onEmojiPicked(emoji: string) {
