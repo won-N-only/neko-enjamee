@@ -45,6 +45,9 @@
         />
       </li>
       <li>
+        <i class="fas fa-arrow-down toggle" @click="toggleBottomMenu" />
+      </li>
+      <li>
         <span v-if="showBadge" class="badge">&bull;</span>
         <i class="fas fa-bars toggle" @click="toggleMenu" />
       </li>
@@ -174,6 +177,10 @@
       return this.$accessor.client.side
     }
 
+    get bottom() {
+      return this.$accessor.client.bottom
+    }
+
     get texts() {
       return this.$accessor.chat.texts
     }
@@ -198,6 +205,10 @@
     toggleMenu() {
       this.$accessor.client.toggleSide()
       this.readTexts = this.texts
+    }
+
+    toggleBottomMenu() {
+      this.$accessor.client.toggleBottom()
     }
 
     lockedTooltip(resource: AdminLockResource) {

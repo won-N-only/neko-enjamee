@@ -11,7 +11,7 @@
         <div class="video-container">
           <neko-video ref="video" :hideControls="hideControls" @control-attempt="controlAttempt" />
         </div>
-        <div v-if="!hideControls" class="room-container">
+        <div v-if="!hideControls && bottom" class="room-container">
           <neko-members />
           <div class="room-menu">
             <div class="settings">
@@ -211,6 +211,10 @@
 
     get side() {
       return this.$accessor.client.side
+    }
+
+    get bottom() {
+      return this.$accessor.client.bottom
     }
 
     get connected() {
