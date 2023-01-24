@@ -126,7 +126,7 @@
 
     .neko-menu {
       order: 2;
-      height: 60%;
+      height: 50%;
       width: 100%;
     }
   }
@@ -173,10 +173,22 @@
 
     mounted() {
       // https://stackoverflow.com/a/53883824
-      let vh = window.innerHeight * 0.01
+      // https://stackoverflow.com/a/74962180
+      let vh = window.innerHeight * 0.01;
+
+      if (window.visualViewport) {
+        vh = window.visualViewport.height * 0.01
+      }
+      
       document.documentElement.style.setProperty('--vh', `${vh}px`)
+
       window.addEventListener('resize', () => {
-        let vh = window.innerHeight * 0.01
+        let vh = window.innerHeight * 0.01;
+
+        if (window.visualViewport) {
+          vh = window.visualViewport.height * 0.01
+        }
+        
         document.documentElement.style.setProperty('--vh', `${vh}px`)
       })
     }
