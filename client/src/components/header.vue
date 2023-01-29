@@ -45,7 +45,16 @@
         />
       </li>
       <li>
-        <i class="fas fa-arrow-down toggle" @click="toggleBottomMenu" />
+        <i
+          :class="['fas', side_to_bottom ? 'fa-arrows-down-to-line' : 'fa-arrow-right-to-bracket']"
+          @click="toggleSideToBottom"
+        />
+      </li>
+      <li>
+        <i
+          :class="['fas', bottom ? 'fa-users' : 'fa-users-slash']"
+          @click="toggleBottomMenu"
+        />
       </li>
       <li>
         <span v-if="showBadge" class="badge">&bull;</span>
@@ -177,6 +186,10 @@
       return this.$accessor.client.side
     }
 
+    get side_to_bottom() {
+      return this.$accessor.client.side_to_bottom
+    }
+
     get bottom() {
       return this.$accessor.client.bottom
     }
@@ -209,6 +222,10 @@
 
     toggleBottomMenu() {
       this.$accessor.client.toggleBottom()
+    }
+
+    toggleSideToBottom() {
+      this.$accessor.client.toggleSideToBottom()
     }
 
     lockedTooltip(resource: AdminLockResource) {

@@ -1,5 +1,5 @@
 <template>
-  <div id="neko" :class="[side ? 'expanded' : '']">
+  <div id="neko" :class="[side_to_bottom ? 'side-to-bottom' : '']">
     <template v-if="!$client.supported">
       <neko-unsupported />
     </template>
@@ -114,20 +114,33 @@
     }
   }
 
-  @media only screen and (max-width: 800px) {
+  #neko.side-to-bottom {
+      flex-direction: column;
 
+      .neko-main {
+        order: 1;
+      }
+
+      .neko-menu {
+        order: 2;
+        height: 50%;
+        width: 100%;
+      }
+  }
+
+  @media only screen and (max-width: 800px) {
     #neko {
       flex-direction: column;
-    }
 
-    .neko-main {
-      order: 1;
-    }
+      .neko-main {
+        order: 1;
+      }
 
-    .neko-menu {
-      order: 2;
-      height: 50%;
-      width: 100%;
+      .neko-menu {
+        order: 2;
+        height: 50%;
+        width: 100%;
+      }
     }
   }
 
@@ -214,6 +227,10 @@
 
     get side() {
       return this.$accessor.client.side
+    }
+
+    get side_to_bottom() {
+      return this.$accessor.client.side_to_bottom
     }
 
     get bottom() {
