@@ -1,5 +1,5 @@
 <template>
-  <div id="neko" :class="[!videoOnly || side_to_bottom ? 'side-to-bottom' : '']">
+  <div id="neko" :class="[!videoOnly && side_to_bottom ? 'side-to-bottom' : '']">
     <template v-if="!$client.supported">
       <neko-unsupported />
     </template>
@@ -16,7 +16,7 @@
             @control-attempt="controlAttempt"
           />
         </div>
-        <div v-if="!videoOnly || (!hideControls && bottom)" class="room-container">
+        <div v-if="!videoOnly && !hideControls && bottom" class="room-container">
           <neko-members />
           <div class="room-menu">
             <div class="settings">
