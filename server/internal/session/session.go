@@ -78,7 +78,11 @@ func (session *Session) SetPeer(peer types.Peer) error {
 func (session *Session) SetConnected(connected bool) error {
 	session.connected = connected
 	if connected {
-		session.manager.emmiter.Emit("connected", session.id, session)
+		session.manager.eventsChannel <- types.SessionEvent{
+			Type:    types.SESSION_CONNECTED,
+			Id:      session.id,
+			Session: session,
+		}
 	}
 	return nil
 }
@@ -127,6 +131,17 @@ func (session *Session) SignalLocalAnswer(sdp string) error {
 	})
 }
 
+func (session *Session) SignalLocalCandidate(data string) error {
+	if session.socket == nil {
+		return nil
+	}
+	session.logger.Info().Msg("signal update - LocalCandidate")
+	return session.socket.Send(&message.SignalCandidate{
+		Event: event.SIGNAL_CANDIDATE,
+		Data:  data,
+	})
+}
+
 func (session *Session) SignalRemoteOffer(sdp string) error {
 	if session.peer == nil {
 		return nil
@@ -150,14 +165,12 @@ func (session *Session) SignalRemoteAnswer(sdp string) error {
 	return session.peer.SetAnswer(sdp)
 }
 
-func (session *Session) SignalCandidate(data string) error {
+func (session *Session) SignalRemoteCandidate(data string) error {
 	if session.socket == nil {
 		return nil
 	}
-	return session.socket.Send(&message.SignalCandidate{
-		Event: event.SIGNAL_CANDIDATE,
-		Data:  data,
-	})
+	session.logger.Info().Msg("signal update - RemoteCandidate")
+	return session.peer.SetCandidate(data)
 }
 
 func (session *Session) destroy() error {

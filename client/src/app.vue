@@ -1,17 +1,22 @@
 <template>
-  <div id="neko" :class="[side_to_bottom ? 'side-to-bottom' : '']">
+  <div id="neko" :class="[!videoOnly && side_to_bottom ? 'side-to-bottom' : '']">
     <template v-if="!$client.supported">
       <neko-unsupported />
     </template>
     <template v-else>
       <main class="neko-main">
-        <div v-if="!hideControls" class="header-container">
+        <div v-if="!videoOnly" class="header-container">
           <neko-header />
         </div>
         <div class="video-container">
-          <neko-video ref="video" :hideControls="hideControls" @control-attempt="controlAttempt" />
+          <neko-video
+            ref="video"
+            :hideControls="hideControls"
+            :extraControls="isEmbedMode"
+            @control-attempt="controlAttempt"
+          />
         </div>
-        <div v-if="!hideControls && bottom" class="room-container">
+        <div v-if="!videoOnly || (!hideControls && bottom)" class="room-container">
           <neko-members />
           <div class="room-menu">
             <div class="settings">
@@ -26,11 +31,11 @@
           </div>
         </div>
       </main>
-      <neko-side v-if="!hideControls && side" />
+      <neko-side v-if="!videoOnly && side" />
       <neko-connect v-if="!connected" />
       <neko-about v-if="about" />
       <notifications
-        v-if="!hideControls"
+        v-if="!videoOnly"
         group="neko"
         position="top left"
         style="top: 50px; pointer-events: none"
@@ -180,7 +185,12 @@
 
     shakeKbd = false
 
-    get hideControls() {
+    get volume() {
+      const numberParam = parseFloat(new URL(location.href).searchParams.get('volume') || '1.0')
+      return Math.max(0.0, Math.min(!isNaN(numberParam) ? numberParam * 100 : 100, 100))
+    }
+
+    get isCastMode() {
       return !!new URL(location.href).searchParams.get('cast')
     }
 
@@ -204,6 +214,23 @@
         
         document.documentElement.style.setProperty('--vh', `${vh}px`)
       })
+    }
+    
+    get isEmbedMode() {
+      return !!new URL(location.href).searchParams.get('embed')
+    }
+
+    get hideControls() {
+      return this.isCastMode
+    }
+
+    get videoOnly() {
+      return this.isCastMode || this.isEmbedMode
+    }
+
+    @Watch('volume', { immediate: true })
+    onVolume(volume: number) {
+      this.$accessor.video.setVolume(volume)
     }
 
     @Watch('hideControls', { immediate: true })

@@ -2,6 +2,7 @@ package config
 
 import (
 	"m1k1o/neko/internal/types/codec"
+	"strings"
 
 	"github.com/pion/webrtc/v3"
 	"github.com/rs/zerolog/log"
@@ -9,13 +10,21 @@ import (
 	"github.com/spf13/viper"
 )
 
+type HwEnc int
+
+const (
+	HwEncNone HwEnc = iota
+	HwEncVAAPI
+	HwEncNVENC
+)
+
 type Capture struct {
 	// video
 	Display       string
 	VideoCodec    codec.RTPCodec
-	VideoHWEnc    string // TODO: Pipeline builder.
-	VideoBitrate  uint   // TODO: Pipeline builder.
-	VideoMaxFPS   int16  // TODO: Pipeline builder.
+	VideoHWEnc    HwEnc // TODO: Pipeline builder.
+	VideoBitrate  uint  // TODO: Pipeline builder.
+	VideoMaxFPS   int16 // TODO: Pipeline builder.
 	VideoPipeline string
 
 	// audio
@@ -57,6 +66,12 @@ func (Capture) Init(cmd *cobra.Command) error {
 	}
 
 	// DEPRECATED: video codec
+	cmd.PersistentFlags().Bool("av1", false, "DEPRECATED: use video_codec")
+	if err := viper.BindPFlag("av1", cmd.PersistentFlags().Lookup("av1")); err != nil {
+		return err
+	}
+
+	// DEPRECATED: video codec
 	cmd.PersistentFlags().Bool("h264", false, "DEPRECATED: use video_codec")
 	if err := viper.BindPFlag("h264", cmd.PersistentFlags().Lookup("h264")); err != nil {
 		return err
@@ -86,7 +101,7 @@ func (Capture) Init(cmd *cobra.Command) error {
 	// audio
 	//
 
-	cmd.PersistentFlags().String("device", "auto_null.monitor", "audio device to capture")
+	cmd.PersistentFlags().String("device", "audio_output.monitor", "audio device to capture")
 	if err := viper.BindPFlag("device", cmd.PersistentFlags().Lookup("device")); err != nil {
 		return err
 	}
@@ -173,13 +188,24 @@ func (s *Capture) Set() {
 	} else if viper.GetBool("h264") {
 		s.VideoCodec = codec.H264()
 		log.Warn().Msg("you are using deprecated config setting 'NEKO_H264=true', use 'NEKO_VIDEO_CODEC=h264' instead")
+	} else if viper.GetBool("av1") {
+		s.VideoCodec = codec.AV1()
+		log.Warn().Msg("you are using deprecated config setting 'NEKO_AV1=true', use 'NEKO_VIDEO_CODEC=av1' instead")
 	}
 
-	videoHWEnc := ""
-	if viper.GetString("hwenc") == "VAAPI" {
-		videoHWEnc = "VAAPI"
+	videoHWEnc := strings.ToLower(viper.GetString("hwenc"))
+	switch videoHWEnc {
+	case "":
+		fallthrough
+	case "none":
+		s.VideoHWEnc = HwEncNone
+	case "vaapi":
+		s.VideoHWEnc = HwEncVAAPI
+	case "nvenc":
+		s.VideoHWEnc = HwEncNVENC
+	default:
+		log.Warn().Str("hwenc", videoHWEnc).Msgf("unknown video hw encoder, using CPU")
 	}
-	s.VideoHWEnc = videoHWEnc
 
 	s.VideoBitrate = viper.GetUint("video_bitrate")
 	s.VideoMaxFPS = int16(viper.GetInt("max_fps"))

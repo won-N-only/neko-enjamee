@@ -1,7 +1,7 @@
 #
 # STAGE 1: SERVER
 #
-FROM golang:1.18-bullseye as server
+FROM golang:1.20-bullseye as server
 WORKDIR /src
 
 #
@@ -32,7 +32,7 @@ RUN go get -v -t -d . && go build -o bin/neko cmd/neko/main.go
 #
 # STAGE 2: CLIENT
 #
-FROM node:14-bullseye-slim as client
+FROM node:18-bullseye-slim as client
 WORKDIR /src
 
 #
@@ -79,7 +79,9 @@ RUN set -eux; \
         # Japanese fonts
         fonts-takao-mincho \
         # Chinese fonts
-        fonts-wqy-zenhei; \
+        fonts-wqy-zenhei xfonts-intl-chinese xfonts-wqy \
+        # Korean fonts
+        fonts-wqy-microhei; \
     #
     # create a non-root user
     groupadd --gid $USER_GID $USERNAME; \
@@ -88,17 +90,13 @@ RUN set -eux; \
     adduser $USERNAME video; \
     adduser $USERNAME pulse; \
     #
-    # setup pulseaudio
-    mkdir -p /home/$USERNAME/.config/pulse/; \
-    echo "default-server=unix:/tmp/pulseaudio.socket" > /home/$USERNAME/.config/pulse/client.conf; \
-    #
     # workaround for an X11 problem: http://blog.tigerteufel.de/?p=476
     mkdir /tmp/.X11-unix; \
     chmod 1777 /tmp/.X11-unix; \
     chown $USERNAME /tmp/.X11-unix/; \
     #
     # make directories for neko
-    mkdir -p /etc/neko /var/www /var/log/neko; \
+    mkdir -p /etc/neko /var/www /var/log/neko /home/$USERNAME/.config/pulse /home/$USERNAME/.local/share/xorg; \
     chmod 1777 /var/log/neko; \
     chown $USERNAME /var/log/neko/; \
     chown -R $USERNAME:$USERNAME /home/$USERNAME; \
@@ -118,6 +116,7 @@ COPY .docker/base/xorg.conf /etc/neko/xorg.conf
 # set default envs
 ENV USER=$USERNAME
 ENV DISPLAY=:99.0
+ENV PULSE_SERVER=unix:/tmp/pulseaudio.socket
 ENV NEKO_PASSWORD=neko
 ENV NEKO_PASSWORD_ADMIN=admin
 ENV NEKO_BIND=:8080
