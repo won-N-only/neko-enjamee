@@ -14,8 +14,8 @@ RUN set -eux; \
 
 # install vlc yt-dlp plugin
 # https://www.remlab.net/vlc-plugin-ytdl/
-COPY .docker/vlc/ytdlp/libytdl_plugin.so /usr/lib/x86_64-linux-gnu/vlc/plugins/stream_filter/libytdl_plugin.so
-COPY .docker/vlc/ytdlp/ytdl-extract.py /usr/share/vlc/ytdl-extract.py
+COPY ytdlp/libytdl_plugin.so /usr/lib/x86_64-linux-gnu/vlc/plugins/stream_filter/libytdl_plugin.so
+COPY ytdlp/ytdl-extract.py /usr/share/vlc/ytdl-extract.py
 
 RUN chmod 0775 /usr/lib/x86_64-linux-gnu/vlc/plugins/stream_filter/libytdl_plugin.so; \
     chmod 0775 /usr/share/vlc/ytdl-extract.py; \
