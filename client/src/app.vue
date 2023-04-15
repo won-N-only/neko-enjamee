@@ -147,7 +147,7 @@
         width: 100%;
       }
 
-      .room-container {
+      .room-menu {
         flex-wrap: wrap;
         overflow-y: auto;
         justify-content: center;
