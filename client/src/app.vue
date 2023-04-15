@@ -146,6 +146,25 @@
         height: 50%;
         width: 100%;
       }
+
+      .room-container {
+        flex-wrap: wrap;
+        overflow-y: auto;
+        justify-content: center;
+
+        .settings {
+          order: 1;
+        }
+
+        .emotes {
+          order: 2;
+        }
+
+        .controls {
+          order: 3;
+        }
+      }
+
     }
   }
 
