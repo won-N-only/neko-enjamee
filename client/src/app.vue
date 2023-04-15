@@ -86,6 +86,7 @@
         flex-shrink: 0;
         flex-direction: column;
         display: flex;
+        overflow-x: auto;
 
         .room-menu {
           max-width: 100%;
@@ -113,6 +114,10 @@
             justify-content: flex-end;
             align-items: center;
             display: flex;
+          }
+
+          ul {
+            white-space: nowrap;
           }
         }
       }
