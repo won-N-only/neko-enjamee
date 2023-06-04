@@ -492,43 +492,40 @@
     }
 
     onKeyDown(event: KeyboardEvent) {
+      // Do nothing if user is muted by admin
       if (this.muted) {
         return
       }
 
-      if (this.content.length > length) {
-        this.content = this.content.substring(0, length)
+      // Workaround: ignore IME composing event
+      if (event.isComposing || event.key === 'Process') {
+        return
       }
 
-      if (this.content.length == length) {
-        if (
-          [8, 16, 17, 18, 20, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 91, 93, 144].includes(event.keyCode) ||
-          (event.ctrlKey && [67, 65, 88].includes(event.keyCode))
-        ) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        // Prevent enter keypress event
+        event.preventDefault()
+
+        // Workaround: iOS IME CJK compositing buffer bug
+        this._hinput.focus()
+        this._input.focus()
+
+        // Check if text is empty
+        if (this.content.length === 0) {
           return
         }
 
-        event.preventDefault()
+        // Cut message if it's over limit and notify to user
+        if (this.content.length > length) {
+          this.content = this.content.substring(0, length)
+          return
+        }
+
+        this.$accessor.chat.sendMessage(this.content)
+        this.content = ''
+
         return
       }
-
-      if (event.keyCode !== 13 || event.shiftKey) {
-        return
-      }
-
-      if (this.content === '') {
-        event.preventDefault()
-        return
-      }
-
-      event.preventDefault()
-
-      this._hinput.focus()
-      this._input.focus()
-
-      this.$accessor.chat.sendMessage(this.content)
-
-      this.content = ''
     }
   }
 </script>
