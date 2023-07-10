@@ -34,7 +34,7 @@
       max-width: 70vw;
       background: $background-secondary;
       border-radius: 5px;
-      max-height: calc(var(--vh, 1vh) * 70);
+      max-height: 70dvh;
       overflow-y: auto;
       overflow-x: hidden;
 
