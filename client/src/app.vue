@@ -129,7 +129,7 @@
 
     .neko-menu {
       order: 1;
-      flex: 1;
+      width: 100%;
       height: 100%;
     }
   }
@@ -139,7 +139,7 @@
 
       .neko-main {
         order: 1;
-        height: 50%;
+        height: 40%;
       }
 
       .neko-menu {
@@ -155,7 +155,7 @@
 
       .neko-main {
         order: 1;
-        height: 50%;
+        height: 40%;
       }
 
       .neko-menu {
