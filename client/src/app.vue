@@ -1,5 +1,5 @@
 <template>
-  <div id="neko" :class="[!videoOnly && side_to_bottom ? 'side-to-bottom' : '']">
+  <div id="neko" :class="[!videoOnly && side_to_bottom ? 'side-to-bottom' : '', chatOnly ? 'chat-only' : '']">
     <template v-if="!$client.supported">
       <neko-unsupported />
     </template>
@@ -8,7 +8,7 @@
         <div v-if="!videoOnly" class="header-container">
           <neko-header />
         </div>
-        <div class="video-container">
+        <div v-if="!chatOnly" class="video-container">
           <neko-video
             ref="video"
             :hideControls="hideControls"
@@ -22,7 +22,7 @@
             <div class="settings">
               <neko-menu />
             </div>
-            <div class="controls">
+            <div v-if="!chatOnly" class="controls">
               <neko-controls :shakeKbd="shakeKbd" />
             </div>
             <div class="emotes">
@@ -35,7 +35,7 @@
       <neko-connect v-if="!connected" />
       <neko-about v-if="about" />
       <notifications
-        v-if="!videoOnly"
+        v-if="!videoOnly || !chatOnly"
         group="neko"
         position="top left"
         style="top: 50px; pointer-events: none"
@@ -52,8 +52,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    max-width: 100vw;
-    max-height: calc(var(--vh, 1vh) * 100);
+    max-width: 100dvw;
+    max-height: 100dvh;
     flex-direction: row;
     display: flex;
 
@@ -121,6 +121,18 @@
           }
         }
       }
+    }
+  }
+
+  #neko.chat-only {
+    flex-direction: column;
+
+    .neko-main {
+      order: 1;
+    }
+
+    .neko-menu {
+      order: 2;
     }
   }
 
@@ -218,6 +230,10 @@
       return !!new URL(location.href).searchParams.get('cast')
     }
 
+    get isChatMode() {
+      return !!new URL(location.href).searchParams.get('chat')
+    }
+
     mounted() {
       // https://stackoverflow.com/a/53883824
       // https://stackoverflow.com/a/74962180
@@ -246,6 +262,10 @@
 
     get hideControls() {
       return this.isCastMode
+    }
+
+    get chatOnly() {
+      return this.isChatMode
     }
 
     get videoOnly() {
