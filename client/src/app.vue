@@ -127,12 +127,10 @@
   #neko.chat-only {
     flex-direction: column;
 
-    .neko-main {
-      order: 1;
-    }
-
     .neko-menu {
-      order: 2;
+      order: 1;
+      flex: 1;
+      height: 100%;
     }
   }
 
@@ -141,11 +139,12 @@
 
       .neko-main {
         order: 1;
+        height: 50%;
       }
 
       .neko-menu {
         order: 2;
-        height: 50%;
+        flex: 1;
         width: 100%;
       }
   }
@@ -156,11 +155,12 @@
 
       .neko-main {
         order: 1;
+        height: 50%;
       }
 
       .neko-menu {
         order: 2;
-        height: 50%;
+        flex: 1;
         width: 100%;
       }
 
