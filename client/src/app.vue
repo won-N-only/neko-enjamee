@@ -139,13 +139,15 @@
 
       .neko-main {
         order: 1;
-        height: 40%;
+        height: 50%;
+        flex-grow: 0;
       }
 
       .neko-menu {
         order: 2;
         flex: 1;
         width: 100%;
+        max-height: 50%;
       }
   }
 
@@ -155,13 +157,15 @@
 
       .neko-main {
         order: 1;
-        height: 40%;
+        height: 50%;
+        flex-grow: 0;
       }
 
       .neko-menu {
         order: 2;
         flex: 1;
         width: 100%;
+        max-height: 50%;
       }
 
       .room-menu {
