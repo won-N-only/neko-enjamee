@@ -1,14 +1,14 @@
 <template>
-  <div id="neko" :class="[!videoOnly && side_to_bottom ? 'side-to-bottom' : '', chatOnly ? 'chat-only' : '']">
+  <div id="neko" :class="[chatOnly ? 'chat-only' : (!videoOnly && side_to_bottom ? 'side-to-bottom' : '')]">
     <template v-if="!$client.supported">
       <neko-unsupported />
     </template>
     <template v-else>
-      <main class="neko-main">
+      <main v-if="!chatOnly" class="neko-main">
         <div v-if="!videoOnly" class="header-container">
           <neko-header />
         </div>
-        <div v-if="!chatOnly" class="video-container">
+        <div class="video-container">
           <neko-video
             ref="video"
             :hideControls="hideControls"
@@ -31,7 +31,7 @@
           </div>
         </div>
       </main>
-      <neko-side v-if="!videoOnly && side" />
+      <neko-side v-if="chatOnly || (!videoOnly && side)" />
       <neko-connect v-if="!connected" />
       <neko-about v-if="about" />
       <notifications
