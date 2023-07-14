@@ -411,7 +411,9 @@
     @Watch('history')
     onHistroyChange() {
       this.$nextTick(() => {
-        this._history.scrollTop = this._history.scrollHeight
+        if (this._history.scrollTop + this._history.clientHeight >= this._history.scrollHeight - 100) {
+          this._history.scrollTop = this._history.scrollHeight
+        }
       })
     }
 
