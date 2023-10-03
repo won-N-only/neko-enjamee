@@ -50,7 +50,7 @@ All images are also available on [GitHub Container Registry](https://github.com/
 - `ghcr.io/m1k1o/neko/xfce:latest`
 - `ghcr.io/m1k1o/neko/kde:latest`
 
-For ARM-based images (like Raspberry Pi - with GPU hardware acceleration, Oracle Cloud ARM tier). Currently, not all images are available for ARM, because not all applications are available for ARM.
+For ARM-based images (like Raspberry Pi - with GPU hardware acceleration, Oracle Cloud ARM tier). Currently, not all images are available for ARM, because not all applications are available for ARM. Please note, that `m1k1o/neko:arm-*` images from dockerhub are currently not maintained and they can contain outdated software. Please use images below:
 
 - `ghcr.io/m1k1o/neko/arm-firefox:latest`
 - `ghcr.io/m1k1o/neko/arm-chromium:latest`
@@ -74,8 +74,9 @@ For images with VAAPI GPU hardware acceleration using intel drivers use:
 - `ghcr.io/m1k1o/neko/intel-xfce:latest`
 - `ghcr.io/m1k1o/neko/intel-kde:latest`
 
-For images with Nvidia GPU hardware acceleration using EGL use:
+For images with Nvidia GPU hardware acceleration using EGL (see example below) use (please note, there is a known issue with EGL and Chromium-based browsers, see [here](https://github.com/m1k1o/neko/issues/279)):
 
+- `ghcr.io/m1k1o/neko/nvidia-firefox:latest`
 - `ghcr.io/m1k1o/neko/nvidia-chromium:latest`
 - `ghcr.io/m1k1o/neko/nvidia-google-chrome:latest`
 - `ghcr.io/m1k1o/neko/nvidia-microsoft-edge:latest`
@@ -130,6 +131,17 @@ services:
 - You can use them alone (either TCP or UDP) when needed.
   - UDP is generally better for latency. But some networks block UDP so it is good to have TCP available as fallback.
 - Still, using `NEKO_ICELITE=true` is recommended.
+
+### Using turn servers instead of port forwarding
+
+- If you don't want to use port forwarding, you can use turn servers.
+- But you need to have your own turn server (e.g. [cotrun](https://github.com/coturn/coturn)) or have access to one.
+- They are generally not free, because they require a lot of bandwidth.
+- Please make sure that you correctly escape your turn server credentials in the environment variable or use aphostrophes.
+
+```yaml
+NEKO_ICESERVERS: '[{"urls": ["turn:<MY-COTURN-SERVER>:443?transport=udp", "turn:<MY-COTURN-SERVER>:443?transport=tcp", "turns:<MY-COTURN-SERVER>:443?transport=udp", "turns:<MY-COTURN-SERVER>:443?transport=tcp"], "credential": "<MY-COTURN-CREDENTIAL"}, {"urls": ["stun:stun.nextcloud.com:443"]}]'
+```
 
 ### Want to customize and install own add-ons, set custom bookmarks?
 - You would need to modify the existing policy file and mount it to your container.
@@ -219,6 +231,12 @@ services:
 - You can verify that GPU is used for encoding by searching for `nvh264enc` in `docker logs neko` output.
 - If you don'ŧ specify `NEKO_HWENC: nvenc` environment variable, CPU encoding will be used but GPU will still be available for browser rendering.
 
+Broadcast pipeline is not hardware accelerated by default. You can use this pipeline created by [@evilalmus](https://github.com/m1k1o/neko/issues/276#issuecomment-1498362533).
+
+```yaml
+NEKO_BROADCAST_PIPELINE: "flvmux name=mux ! rtmpsink location={url} pulsesrc device={device} ! audio/x-raw,channels=2 ! audioconvert ! voaacenc ! mux. ximagesrc display-name={display} show-pointer=false use-damage=false ! video/x-raw,framerate=30/1 ! videoconvert ! queue ! video/x-raw,format=NV12 ! nvh264enc name=encoder preset=low-latency-hq gop-size=25 spatial-aq=true temporal-aq=true bitrate=2800 vbv-buffer-size=2800 rc-mode=6 ! h264parse config-interval=-1 ! video/x-h264,stream-format=byte-stream,profile=high ! h264parse ! mux."
+```
+
 ### Want to use VPN for your n.eko browsing?
 - Check this out: https://github.com/m1k1o/neko-vpn
 
@@ -238,6 +256,7 @@ services:
   - Adding `?cast=1` will hide all control and show only video.
   - Adding `?embed=1` will hide most additional components and show only video.
   - Adding `?volume=<0-1>` will set volume to given value.
+  - Adding `?lang=<language>` will set language to given value.
   - e.g. `http(s)://<URL:Port>/?pwd=neko&usr=guest&cast=1`
 
 ### Screen size
