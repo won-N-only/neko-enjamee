@@ -525,6 +525,7 @@
 
         this.$accessor.chat.sendMessage(this.content)
         this.content = ''
+        this._history.scrollTop = this._history.scrollHeight
 
         return
       }
