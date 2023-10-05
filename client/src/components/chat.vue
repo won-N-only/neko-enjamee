@@ -273,12 +273,11 @@
       }
     }
 
-    //make .chat-scroll-to-bottom as floating button middle above .chat-send
+    //make .chat-scroll-to-bottom as floating button right above .chat-send
     .chat-scroll-to-bottom {
       position: absolute;
       bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 20px;
       z-index: 1;
       cursor: pointer;
       color: $text-muted;
