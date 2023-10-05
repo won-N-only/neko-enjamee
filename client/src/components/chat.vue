@@ -39,6 +39,9 @@
       </template>
     </ul>
     <neko-context ref="context" />
+    <div class="chat-scroll-to-bottom">
+      <i class="fas fa-angle-double-down" @click="() => { _history.scrollTop = _history.scrollHeight }" />
+    </div>
     <div v-if="!muted" class="chat-send">
       <div class="accent" />
       <div class="text-container">
@@ -267,6 +270,22 @@
             }
           }
         }
+      }
+    }
+
+    //make .chat-scroll-to-bottom as floating button on bottom right of .chat-history
+    .chat-scroll-to-bottom {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      z-index: 1;
+      cursor: pointer;
+      color: $text-muted;
+      font-size: 20px;
+      transition: color 0.2s ease-in-out;
+
+      &:hover {
+        color: $text-normal;
       }
     }
 
