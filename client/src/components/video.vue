@@ -42,8 +42,6 @@
             @click.stop.prevent="toggleControl"
           />
         </li>
-      </ul>
-      <ul v-if="!fullscreen && !hideControls" class="video-menu bottom">
         <li v-if="hosting && (!clipboard_read_available || !clipboard_write_available)">
           <i @click.stop.prevent="openClipboard" class="fas fa-clipboard"></i>
         </li>
@@ -76,7 +74,7 @@
 
       .video-menu {
         position: absolute;
-        right: 20px;
+        left: 20px;
 
         &.top {
           top: 15px;
