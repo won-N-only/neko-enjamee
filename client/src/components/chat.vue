@@ -46,7 +46,6 @@
         <neko-emoji v-if="emoji" @picked="onEmojiPicked" @done="emoji = false" />
         <li>
           <i class="emoji-menu fas fa-laugh" @click.stop.prevent="onEmoji"></i>
-          <i class="clear-button fas fa-trash" @click="clearHistory"></i>
         </li>
       </div>
       <input ref="hinput" type="text"/>
@@ -414,6 +413,10 @@
         if (this._history.scrollTop + this._history.clientHeight >= this._history.scrollHeight - 100) {
           this._history.scrollTop = this._history.scrollHeight
         }
+
+        if (this.history.length > 200) {
+          this.history.splice(0, this.history.length - 200)
+        }
       })
     }
 
@@ -442,10 +445,6 @@
     onEmoji() {
       this.emoji = !this.emoji
       this._input.focus()
-    }
-
-    clearHistory() {
-      this.history.splice(0, this.history.length)
     }
 
     onEmojiPicked(emoji: string) {
