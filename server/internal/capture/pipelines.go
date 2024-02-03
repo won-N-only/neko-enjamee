@@ -104,14 +104,22 @@ func NewVideoPipeline(rtpCodec codec.RTPCodec, display string, pipelineSrc strin
 			}, " ")
 		}
 	case codec.VP9().Name:
-		// https://gstreamer.freedesktop.org/documentation/vpx/vp9enc.html?gi-language=c
-		// gstreamer1.0-plugins-good
-		// vp9enc
 		if err := gst.CheckPlugins([]string{"ximagesrc", "vpx"}); err != nil {
 			return "", err
 		}
 
-		pipelineStr = fmt.Sprintf(videoSrc+"vp9enc target-bitrate=%d cpu-used=-5 threads=4 deadline=1 keyframe-max-dist=30 auto-alt-ref=true"+pipelineStr, display, fps, bitrate*1000)
+		if hwenc == config.HwEncVAAPI {
+			if err := gst.CheckPlugins([]string{"vaapi"}); err != nil {
+				return "", err
+			}
+
+			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapivp9enc rate-control=vbr bitrate=%d keyframe-period=180"+pipelineStr, display, fps, bitrate)
+		} else {
+			// https://gstreamer.freedesktop.org/documentation/vpx/vp9enc.html?gi-language=c
+			// gstreamer1.0-plugins-good
+			// vp9enc
+			pipelineStr = fmt.Sprintf(videoSrc+"vp9enc target-bitrate=%d cpu-used=-5 threads=4 deadline=1 keyframe-max-dist=30 auto-alt-ref=true"+pipelineStr, display, fps, bitrate*1000)
+		}
 	case codec.AV1().Name:
 		// https://gstreamer.freedesktop.org/documentation/aom/av1enc.html?gi-language=c
 		// gstreamer1.0-plugins-bad
