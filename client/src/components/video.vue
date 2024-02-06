@@ -600,10 +600,10 @@
 
     requestFullscreen() {
       // try to fullscreen player element
-      if (elementRequestFullscreen(this._player)) {
-        this.onResize()
-        return
-      }
+      //if (elementRequestFullscreen(this._player)) {
+      //  this.onResize()
+      //  return
+      //}
 
       // fallback to fullscreen video itself (on mobile devices)
       if (elementRequestFullscreen(this._video)) {
