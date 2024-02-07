@@ -113,7 +113,7 @@ func NewVideoPipeline(rtpCodec codec.RTPCodec, display string, pipelineSrc strin
 				return "", err
 			}
 
-			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapivp9enc rate-control=cbr bitrate=%d keyframe-period=100 quality-level=7"+pipelineStr, display, fps, bitrate)
+			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapivp9enc rate-control=vbr bitrate=%d keyframe-period=60 quality-level=5"+pipelineStr, display, fps, bitrate)
 		} else {
 			// https://gstreamer.freedesktop.org/documentation/vpx/vp9enc.html?gi-language=c
 			// gstreamer1.0-plugins-good
