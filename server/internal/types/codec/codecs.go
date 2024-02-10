@@ -113,7 +113,7 @@ func H264() RTPCodec {
 			MimeType:     webrtc.MimeTypeH264,
 			ClockRate:    90000,
 			Channels:     0,
-			SDPFmtpLine:  "level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=64001f",
+			SDPFmtpLine:  "level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f",
 			RTCPFeedback: RTCPFeedback,
 		},
 	}

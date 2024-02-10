@@ -113,7 +113,7 @@ func NewVideoPipeline(rtpCodec codec.RTPCodec, display string, pipelineSrc strin
 				return "", err
 			}
 
-			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapivp9enc rate-control=vbr bitrate=%d keyframe-period=60 quality-level=5"+pipelineStr, display, fps, bitrate)
+			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapivp9enc rate-control=vbr bitrate=%d keyframe-period=60 quality-level=7"+pipelineStr, display, fps, bitrate)
 		} else {
 			// https://gstreamer.freedesktop.org/documentation/vpx/vp9enc.html?gi-language=c
 			// gstreamer1.0-plugins-good
@@ -157,7 +157,7 @@ func NewVideoPipeline(rtpCodec codec.RTPCodec, display string, pipelineSrc strin
 				return "", err
 			}
 
-			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapih264enc rate-control=vbr bitrate=%d dct8x8=true cabac=true keyframe-period=60 quality-level=5 ! video/x-h264,stream-format=byte-stream,profile=high"+pipelineStr, display, fps, bitrate)
+			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapih264enc rate-control=vbr bitrate=%d keyframe-period=180 quality-level=7 ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline"+pipelineStr, display, fps, bitrate)
 		} else if hwenc == config.HwEncNVENC {
 			if err := gst.CheckPlugins([]string{"nvcodec"}); err != nil {
 				return "", err
