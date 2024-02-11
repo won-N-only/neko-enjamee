@@ -1,7 +1,7 @@
 #
 # STAGE 1: SERVER
 #
-FROM golang:1.20-bullseye as server
+FROM golang:1.20-bookworm as server
 WORKDIR /src
 
 #
@@ -32,7 +32,7 @@ RUN ./build
 #
 # STAGE 2: CLIENT
 #
-FROM node:18-bullseye-slim as client
+FROM node:18-bookworm-slim as client
 WORKDIR /src
 
 #
@@ -48,7 +48,7 @@ RUN npm run build
 #
 # STAGE 3: RUNTIME
 #
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 #
 # avoid warnings by switching to noninteractive
@@ -65,12 +65,12 @@ RUN set -eux; \
     #
     # install dependencies
     apt-get install -y --no-install-recommends wget ca-certificates supervisor; \
-    apt-get install -y --no-install-recommends pulseaudio dbus-x11 xserver-xorg-video-dummy; \
-    apt-get install -y --no-install-recommends libcairo2 libxcb1 libxrandr2 libxv1 libopus0 libvpx6; \
+    apt-get install -y --no-install-recommends pulseaudio dbus-x11 dbus-system-bus-common xserver-xorg-video-dummy; \
+    apt-get install -y --no-install-recommends libcairo2 libxcb1 libxrandr2 libxv1 libopus0 libvpx7; \
     #
     # gst
     apt-get install -y --no-install-recommends libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-                    gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-pulseaudio; \
+                    gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-pulseaudio gstreamer1.0-tools; \
     #
     # install fonts
     apt-get install -y --no-install-recommends \

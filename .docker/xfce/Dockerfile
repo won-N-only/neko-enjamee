@@ -4,7 +4,7 @@ FROM $BASE_IMAGE
 #
 # install xfce
 RUN set -eux; apt-get update; \
-    apt-get install -y --no-install-recommends xfce4 xfce4-terminal sudo; \
+    apt-get install -y --no-install-recommends xfce4 xfce4-terminal tango-icon-theme sudo; \
     #
     # add user to sudoers
     usermod -aG sudo neko; \
