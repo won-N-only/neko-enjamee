@@ -2,24 +2,13 @@ ARG BASE_IMAGE=m1k1o/neko:base
 FROM $BASE_IMAGE
 
 #
-# install vlc and yt-dlp
-RUN set -eux; \
-    echo "deb http://deb.debian.org/debian bullseye-backports main" >> /etc/apt/sources.list; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends openbox vlc yt-dlp; \
+# install vlc
+RUN set -eux; apt-get update; \
+    apt-get install -y --no-install-recommends openbox vlc; \
     #
     # clean up
     apt-get clean -y; \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-
-# install vlc yt-dlp plugin
-# https://www.remlab.net/vlc-plugin-ytdl/
-COPY .docker/vlc/ytdlp/libytdl_plugin.so /usr/lib/x86_64-linux-gnu/vlc/plugins/stream_filter/libytdl_plugin.so
-COPY .docker/vlc/ytdlp/ytdl-extract.py /usr/share/vlc/ytdl-extract.py
-
-RUN chmod 0775 /usr/lib/x86_64-linux-gnu/vlc/plugins/stream_filter/libytdl_plugin.so; \
-    chmod 0775 /usr/share/vlc/ytdl-extract.py; \
-    rm /usr/lib/x86_64-linux-gnu/vlc/lua/playlist/youtube.luac
 
 ENV VLC_MEDIA="/media"
 
