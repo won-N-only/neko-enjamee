@@ -29,7 +29,12 @@ fi
 
 if [ -z "${1}" ] && [ ! -z "${SERVER_TAG}" ]
 then
-  ./build base
+  case "${SERVER_TAG}" in
+    arm-*) ./build arm-base;;
+    intel-*) ./build intel-base;;
+    nvidia-*) ./build nvidia nvidia-base;;
+    *) ./build base;;
+  esac
   ./build ${SERVER_TAG}
   exit 0
 fi
