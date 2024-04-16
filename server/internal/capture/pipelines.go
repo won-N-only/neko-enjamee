@@ -157,7 +157,7 @@ func NewVideoPipeline(rtpCodec codec.RTPCodec, display string, pipelineSrc strin
 				return "", err
 			}
 
-			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vaapih264enc rate-control=vbr bitrate=%d keyframe-period=60 quality-level=5 ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline"+pipelineStr, display, fps, bitrate)
+			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! vah264enc rate-control=vbr bitrate=%d key-int-max=30 target-usage=6 ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline"+pipelineStr, display, fps, bitrate)
 		} else if hwenc == config.HwEncNVENC {
 			if err := gst.CheckPlugins([]string{"nvcodec"}); err != nil {
 				return "", err
