@@ -45,18 +45,6 @@
         />
       </li>
       <li>
-        <i
-          :class="['fas', side_to_bottom ? 'fa-arrows-down-to-line' : 'fa-arrow-right-to-bracket']"
-          @click="toggleSideToBottom"
-        />
-      </li>
-      <li>
-        <i
-          :class="['fas', bottom ? 'fa-users' : 'fa-users-slash']"
-          @click="toggleBottomMenu"
-        />
-      </li>
-      <li>
         <span v-if="showBadge" class="badge">&bull;</span>
         <i class="fas fa-bars toggle" @click="toggleMenu" />
       </li>

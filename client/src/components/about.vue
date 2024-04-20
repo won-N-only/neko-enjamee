@@ -31,7 +31,7 @@
     align-items: center;
 
     .window {
-      max-width: 70vw;
+      max-width: 70dvw;
       background: $background-secondary;
       border-radius: 5px;
       max-height: 70dvh;

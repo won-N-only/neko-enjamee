@@ -1,5 +1,5 @@
 <template>
-  <div id="neko" :class="[chatOnly ? 'chat-only' : (!videoOnly && side_to_bottom ? 'side-to-bottom' : '')]">
+  <div id="neko" :class="[chatOnly ? 'chat-only' : '']">
     <template v-if="!$client.supported">
       <neko-unsupported />
     </template>
@@ -135,56 +135,43 @@
     }
   }
 
-  #neko.side-to-bottom {
-      flex-direction: column;
-
-      .neko-main {
-        order: 1;
-        height: 50%;
-        flex-grow: 0;
-      }
-
-      .neko-menu {
-        order: 2;
-        flex: 1;
-        width: 100%;
-        max-height: 50%;
-      }
-  }
-
-  @media only screen and (max-width: 800px) {
+  @media only screen and (max-width: 767px) {
     #neko {
+      display: flex;
       flex-direction: column;
+      justify-content: flex-start;
 
       .neko-main {
         order: 1;
-        height: 50%;
+        //height: calc(9 * 100vw / 16 + #{$menu-height} + #{$controls-height});
+        min-height: calc(9 * 100dvw / 16 + #{$menu-height} + #{$controls-height});
         flex-grow: 0;
       }
 
       .neko-menu {
         order: 2;
-        flex: 1;
+        flex-grow: 1;
         width: 100%;
-        max-height: 50%;
-      }
+        max-height: calc(100dvh - (9 * 100dvw / 16 + #{$menu-height} + #{$controls-height}));
 
-      .room-menu {
+        .room-menu {
         flex-wrap: wrap;
         overflow-y: auto;
         justify-content: center;
 
-        .settings {
-          order: 1;
-        }
+          .settings {
+            order: 1;
+          }
 
-        .emotes {
-          order: 2;
-        }
+          .emotes {
+            order: 2;
+          }
 
-        .controls {
-          order: 3;
-        }
+          .controls {
+            order: 3;
+          }
+      }
+
       }
 
     }
@@ -237,28 +224,6 @@
 
     get isChatMode() {
       return !!new URL(location.href).searchParams.get('chat')
-    }
-
-    mounted() {
-      // https://stackoverflow.com/a/53883824
-      // https://stackoverflow.com/a/74962180
-      let vh = window.innerHeight * 0.01;
-
-      if (window.visualViewport) {
-        vh = window.visualViewport.height * 0.01
-      }
-      
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-
-      window.addEventListener('resize', () => {
-        let vh = window.innerHeight * 0.01;
-
-        if (window.visualViewport) {
-          vh = window.visualViewport.height * 0.01
-        }
-        
-        document.documentElement.style.setProperty('--vh', `${vh}px`)
-      })
     }
     
     get isEmbedMode() {

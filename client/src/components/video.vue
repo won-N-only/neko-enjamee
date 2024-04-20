@@ -126,7 +126,7 @@
       .player-container {
         position: relative;
         width: 100%;
-        max-width: calc(16 / 9 * 100vh);
+        max-width: calc(16 / 9 * 100dvh);
 
         video {
           position: absolute;
@@ -778,8 +778,13 @@
     onResize() {
       const { offsetWidth, offsetHeight } = !this.fullscreen ? this._component : document.body
       this._player.style.width = `${offsetWidth}px`
-      this._player.style.height = `${offsetHeight}px`
-      this._container.style.maxWidth = `${(this.horizontal / this.vertical) * offsetHeight}px`
+      if (document.body.offsetWidth >= 767) {
+        this._player.style.height = `${offsetHeight}px`
+        this._container.style.maxWidth = `${(this.horizontal / this.vertical) * offsetHeight}px`
+      } else {
+        this._player.style.height = `${9 * offsetWidth / 16}px`
+        this._container.style.removeProperty('max-width')
+      }
       this._aspect.style.paddingBottom = `${(this.vertical / this.horizontal) * 100}%`
     }
 
