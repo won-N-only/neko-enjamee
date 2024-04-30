@@ -169,10 +169,19 @@ func NewVideoPipeline(rtpCodec codec.RTPCodec, display string, pipelineSrc strin
 			// gstreamer1.0-plugins-ugly
 			// video/x-raw,format=I420 ! x264enc bframes=0 key-int-max=60 byte-stream=true tune=zerolatency speed-preset=veryfast ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline
 			if err := gst.CheckPlugins([]string{"x264"}); err != nil {
-				return "", err
+				pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! x264enc threads=4 bitrate=%d key-int-max=60 vbv-buf-capacity=%d byte-stream=true tune=zerolatency speed-preset=veryfast ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline"+pipelineStr, display, fps, bitrate, vbvbuf)
+				break
 			}
 
-			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! x264enc threads=4 bitrate=%d key-int-max=60 vbv-buf-capacity=%d byte-stream=true tune=zerolatency speed-preset=veryfast ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline"+pipelineStr, display, fps, bitrate, vbvbuf)
+			// https://gstreamer.freedesktop.org/documentation/openh264/openh264enc.html?gi-language=c#openh264enc
+			// gstreamer1.0-plugins-bad
+			// openh264enc multi-thread=4 complexity=high bitrate=3072000 max-bitrate=4096000
+			if err := gst.CheckPlugins([]string{"openh264"}); err == nil {
+				pipelineStr = fmt.Sprintf(videoSrc+"openh264enc multi-thread=4 complexity=high bitrate=%d max-bitrate=%d ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline"+pipelineStr, display, fps, bitrate*1000, (bitrate+1024)*1000)
+				break
+			}
+
+			return "", fmt.Errorf("no h264 encoder candidates found")
 		}
 	default:
 		return "", fmt.Errorf("unknown codec %s", rtpCodec.Name)
