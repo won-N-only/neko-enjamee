@@ -151,8 +151,13 @@ func NewVideoPipeline(rtpCodec codec.RTPCodec, display string, pipelineSrc strin
 		if bitrate > 1000 {
 			vbvbuf = bitrate
 		}
+		if hwenc == config.HwEncQSV {
+			if err := gst.CheckPlugins([]string{"qsv"}); err != nil {
+				return "", err
+			}
 
-		if hwenc == config.HwEncVAAPI {
+			pipelineStr = fmt.Sprintf(videoSrc+"video/x-raw,format=NV12 ! qsvh264enc rate-control=vbr bitrate=%d target-usage=4 ! video/x-h264,stream-format=byte-stream,profile=constrained-baseline"+pipelineStr, display, fps, bitrate)
+		} else if hwenc == config.HwEncVAAPI {
 			if err := gst.CheckPlugins([]string{"vaapi"}); err != nil {
 				return "", err
 			}

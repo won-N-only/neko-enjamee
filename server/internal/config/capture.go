@@ -16,6 +16,7 @@ const (
 	HwEncNone HwEnc = iota
 	HwEncVAAPI
 	HwEncNVENC
+	HwEncQSV
 )
 
 type Capture struct {
@@ -203,6 +204,8 @@ func (s *Capture) Set() {
 		s.VideoHWEnc = HwEncVAAPI
 	case "nvenc":
 		s.VideoHWEnc = HwEncNVENC
+	case "qsv":
+		s.VideoHWEnc = HwEncQSV
 	default:
 		log.Warn().Str("hwenc", videoHWEnc).Msgf("unknown video hw encoder, using CPU")
 	}
