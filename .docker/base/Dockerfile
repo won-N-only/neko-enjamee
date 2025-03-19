@@ -70,18 +70,18 @@ RUN set -eux; \
     #
     # gst
     apt-get install -y --no-install-recommends libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-                    gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-pulseaudio gstreamer1.0-tools; \
+    gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-pulseaudio gstreamer1.0-tools; \
     #
     # install fonts
     apt-get install -y --no-install-recommends \
-        # Google emojis
-        fonts-noto-color-emoji \
-        # Japanese fonts
-        fonts-takao-mincho \
-        # Chinese fonts
-        fonts-wqy-zenhei xfonts-intl-chinese xfonts-wqy \
-        # Korean fonts
-        fonts-wqy-microhei; \
+    # Google emojis
+    fonts-noto-color-emoji \
+    # Japanese fonts
+    fonts-takao-mincho \
+    # Chinese fonts
+    fonts-wqy-zenhei xfonts-intl-chinese xfonts-wqy \
+    # Korean fonts
+    fonts-wqy-microhei; \
     #
     # create a non-root user
     groupadd --gid $USER_GID $USERNAME; \
@@ -97,9 +97,9 @@ RUN set -eux; \
     #
     # make directories for neko
     mkdir -p /etc/neko /var/www /var/log/neko \
-        /tmp/runtime-$USERNAME \
-        /home/$USERNAME/.config/pulse  \
-        /home/$USERNAME/.local/share/xorg; \
+    /tmp/runtime-$USERNAME \
+    /home/$USERNAME/.config/pulse  \
+    /home/$USERNAME/.local/share/xorg; \
     chmod 1777 /var/log/neko; \
     chown $USERNAME /var/log/neko/ /tmp/runtime-$USERNAME; \
     chown -R $USERNAME:$USERNAME /home/$USERNAME; \
@@ -131,7 +131,7 @@ COPY --from=server /src/bin/neko /usr/bin/neko
 COPY --from=client /src/dist/ /var/www
 
 HEALTHCHECK --interval=10s --timeout=5s --retries=8 \
-    CMD wget -O - http://localhost:${NEKO_BIND#*:}/health || exit 1
+    CMD ["wget", "-O", "-", "http://localhost:8080/health"]
 
 #
 # run neko
