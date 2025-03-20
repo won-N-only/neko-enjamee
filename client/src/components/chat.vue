@@ -58,70 +58,41 @@
 
 <style lang="scss" scoped>
   .chat {
-    flex: 1;
-    flex-direction: column;
     display: flex;
-    max-height: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 
     .chat-history {
       flex: 1;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: $background-tertiary transparent;
 
-      &::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: $background-tertiary;
-        border: 2px solid $background-primary;
-        border-radius: 4px;
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        background-color: $background-floating;
-      }
-
-      ::v-deep *::selection {
-        background: $text-link;
-      }
-
       li {
-        flex: 1;
-        border-top: 1px solid var(--border-color);
-        padding: 10px 5px 0px 10px;
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        overflow: hidden;
-        user-select: text;
-        word-wrap: break-word;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba($background-primary, 0.5);
 
         &.message {
-          padding-top: 15px;
-          font-size: 16px;
+          padding: 0.25rem 0.75rem;
 
           .author {
-            flex-grow: 0;
             flex-shrink: 0;
-            overflow: hidden;
-            width: 40px;
-            height: 40px;
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
-            background: $style-primary;
-            margin-right: 10px;
+            overflow: hidden;
 
             .avatar {
               width: 100%;
+              height: 100%;
+              object-fit: cover;
             }
           }
 
@@ -129,113 +100,35 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            box-sizing: border-box;
-            word-wrap: break-word;
+            gap: 0.5rem;
             min-width: 0;
 
             .content-head {
-              cursor: default;
-              width: 100%;
-              margin-bottom: 3px;
-              display: block;
+              display: flex;
+              align-items: baseline;
+              gap: 0.5rem;
+              flex-wrap: wrap;
 
               span {
-                display: inline-block;
-                color: $text-normal;
-                font-weight: 500;
+                font-size: 1rem;
+                line-height: 1.2;
               }
 
               .timestamp {
+                font-size: 0.875rem;
                 color: $text-muted;
-                font-size: 0.7rem;
-                font-weight: 500;
-                margin-left: 0.3rem;
-                line-height: 12px;
-
-                &::first-letter {
-                  text-transform: uppercase;
-                }
               }
             }
 
-            ::v-deep .content-body {
-              color: $text-normal;
-              line-height: 22px;
-              word-wrap: break-word;
-              overflow-wrap: break-word;
-
-              a {
-                color: $text-link;
-              }
-
-              strong {
-                font-weight: 800;
-              }
-
-              em {
-                font-style: italic;
-              }
-
-              blockquote {
-                border-left: 3px $background-accent solid;
-                padding-left: 3px;
-              }
-
-              span {
-                &.spoiler {
-                  background: $background-tertiary;
-                  padding: 0 2px;
-                  border-radius: 4px;
-                  cursor: pointer;
-
-                  span {
-                    opacity: 0;
-                  }
-                }
-
-                &.spoiler.active {
-                  background: $background-secondary;
-                  cursor: default;
-
-                  span {
-                    opacity: 1;
-                  }
-                }
-              }
-
-              code {
-                font-family: Consolas, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter,
-                  DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Monaco, Courier New,
-                  Courier, monospace;
-                background: $background-secondary;
-                border-radius: 3px;
-                padding: 0 3px;
-                font-size: 0.875rem;
-                line-height: 1.125rem;
-                text-indent: 0;
-                white-space: pre-wrap;
-              }
-
-              pre {
-                flex: 1;
-                color: $interactive-normal;
-                border: 1px solid $background-tertiary;
-                background: $background-secondary;
-                padding: 8px 6px;
-                margin: 4px 0;
-                border-radius: 4px;
-                display: block;
-                flex: 1;
-
-                code {
-                  display: block;
-                }
-              }
+            .content-body {
+              font-size: 1rem;
+              line-height: 1.5;
             }
           }
 
           &.bulk {
-            padding-top: 0px;
+            padding: 0.25rem 0.75rem;
+            margin: 0rem;
 
             .author {
               visibility: hidden;
@@ -249,31 +142,15 @@
         }
 
         &.event {
+          justify-content: center;
+          text-align: center;
+          font-size: 0.875rem;
           color: $text-muted;
-          cursor: default;
-
-          .content {
-            min-width: 0;
-            box-sizing: border-box;
-            word-wrap: break-word;
-            display: inline-block;
-            vertical-align: baseline;
-            line-height: 20px;
-
-            strong {
-              font-weight: 600;
-            }
-
-            i {
-              font-style: italic;
-              font-size: 10px;
-            }
-          }
+          padding: 0.5rem;
         }
       }
     }
 
-    //make .chat-scroll-to-bottom as floating button right above .chat-send
     .chat-scroll-to-bottom {
       position: absolute;
       bottom: 100px;
