@@ -1,5 +1,4 @@
 {
-  "endOfLine": "lf",
   "semi": false,
   "trailingComma": "all",
   "singleQuote": true,
@@ -8,5 +7,6 @@
   "vueIndentScriptAndStyle": true,
   "arrowParens": "always",
   "useTabs": false,
+  "endOfLine": "lf",
   "trimTrailingWhitespace": true
 }
