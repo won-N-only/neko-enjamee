@@ -89,31 +89,51 @@
 
 <style lang="scss" scoped>
   .files {
-    flex: 1;
-    flex-direction: column;
     display: flex;
-    max-width: 100%;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 0.625rem;
+    padding: 0.625rem;
 
     .files-cwd {
       display: flex;
-      flex-direction: row;
-      margin: 10px 10px 0px 10px;
-      padding: 0.5em;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.5rem;
       font-weight: 600;
-      background-color: rgba($color: #fff, $alpha: 0.05);
-      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 0.3125rem;
+
+      p {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .refresh {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+
+        &:hover {
+          transform: rotate(45deg);
+        }
+      }
     }
 
     .files-list {
-      margin: 10px 10px 10px 10px;
-      background-color: rgba($color: #fff, $alpha: 0.05);
-      border-radius: 5px;
-      overflow-y: scroll;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 0.3125rem;
+      overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: $background-tertiary transparent;
 
       &::-webkit-scrollbar {
-        width: 8px;
+        width: 0.5rem;
       }
 
       &::-webkit-scrollbar-track {
@@ -122,144 +142,206 @@
 
       &::-webkit-scrollbar-thumb {
         background-color: $background-tertiary;
-        border: 2px solid $background-primary;
-        border-radius: 4px;
+        border: 0.125rem solid $background-primary;
+        border-radius: 0.25rem;
       }
 
       &::-webkit-scrollbar-thumb:hover {
         background-color: $background-floating;
       }
-    }
 
-    .files-list-item {
-      padding: 0.5em;
-      border-bottom: 2px solid rgba($color: #fff, $alpha: 0.1);
-      display: flex;
-      flex-direction: row;
-      line-height: 1.2;
-    }
+      .files-list-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-bottom: 0.125rem solid rgba(255, 255, 255, 0.1);
 
-    .transfers-list-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 2px solid rgba($color: #fff, $alpha: 0.1);
-    }
+        &:last-child {
+          border-bottom: none;
+        }
 
-    .file-icon,
-    .transfer-status {
-      width: 14px;
-      margin-right: 0.5em;
-    }
+        i {
+          flex-shrink: 0;
+          width: 1rem;
+          font-size: 0.875rem;
 
-    .transfer-error {
-      border: 1px solid $style-error;
-      border-radius: 5px;
-      padding: 10px;
-    }
+          &.download {
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
 
-    .files-list-item:last-child {
-      border-bottom: 0px;
-    }
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
 
-    .refresh {
-      margin-left: auto;
-    }
+        .file-name {
+          flex: 1;
+          min-width: 0;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
 
-    .file-name {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .file-size {
-      margin-left: auto;
-      margin-right: 0.5em;
-      color: rgba($color: #fff, $alpha: 0.4);
-      white-space: nowrap;
-    }
-
-    .refresh:hover,
-    .download:hover,
-    .remove-transfer:hover {
-      cursor: pointer;
+        .file-size {
+          flex-shrink: 0;
+          color: rgba(255, 255, 255, 0.4);
+          margin-left: 0.5rem;
+        }
+      }
     }
 
     .transfer-area {
-      margin-top: auto;
-    }
-
-    .transfers {
-      margin: 10px 10px 10px 10px;
-      background-color: rgba($color: #fff, $alpha: 0.05);
-      border-radius: 5px;
-      max-height: 50dvh;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      scrollbar-width: thin;
-      scrollbar-color: $background-tertiary transparent;
-
-      &::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: $background-tertiary;
-        border: 2px solid $background-primary;
-        border-radius: 4px;
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        background-color: $background-floating;
-      }
-    }
-
-    .transfers > p {
-      padding: 10px;
-      font-weight: 600;
-    }
-
-    .transfer-info {
-      display: flex;
-      flex-direction: row;
-      max-width: 100%;
-      padding: 10px;
-    }
-
-    .transfer-progress {
-      margin: 0px 10px 10px 10px;
-      width: 95%;
-    }
-
-    .upload-area {
       display: flex;
       flex-direction: column;
-      text-align: center;
-      justify-content: center;
-      margin: 10px 10px 10px 10px;
-      background-color: rgba($color: #fff, $alpha: 0.05);
-      border-radius: 5px;
-    }
+      gap: 0.625rem;
+      margin-top: auto;
 
-    .upload-area:hover {
-      cursor: pointer;
-    }
+      .transfers {
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 0.3125rem;
+        max-height: 50vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: $background-tertiary transparent;
 
-    .upload-area-drag,
-    .upload-area:hover {
-      background-color: rgba($color: #fff, $alpha: 0.1);
-    }
+        &::-webkit-scrollbar {
+          width: 0.5rem;
+        }
 
-    .upload-area > i {
-      font-size: 4em;
-      margin: 10px 10px 10px 10px;
-    }
+        &::-webkit-scrollbar-track {
+          background-color: transparent;
+        }
 
-    .upload-area > p {
-      margin: 0px 10px 10px 10px;
+        &::-webkit-scrollbar-thumb {
+          background-color: $background-tertiary;
+          border: 0.125rem solid $background-primary;
+          border-radius: 0.25rem;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: $background-floating;
+        }
+
+        .transfers-list-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.625rem;
+          font-weight: 600;
+          border-bottom: 0.125rem solid rgba(255, 255, 255, 0.1);
+
+          .remove-transfer {
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        .transfers-list-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          padding: 0.625rem;
+
+          .transfer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .transfer-status {
+              flex-shrink: 0;
+              width: 1rem;
+              font-size: 0.875rem;
+            }
+
+            .file-name {
+              flex: 1;
+              min-width: 0;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+            }
+
+            .file-size {
+              flex-shrink: 0;
+            }
+
+            .remove-transfer {
+              flex-shrink: 0;
+              cursor: pointer;
+              opacity: 0.6;
+              transition: opacity 0.2s ease;
+
+              &:hover {
+                opacity: 1;
+              }
+            }
+          }
+
+          .transfer-error {
+            padding: 0.625rem;
+            border: 0.0625rem solid $style-error;
+            border-radius: 0.3125rem;
+            color: $style-error;
+          }
+
+          .transfer-progress {
+            width: 100%;
+            height: 0.5rem;
+            border-radius: 0.25rem;
+            overflow: hidden;
+
+            &::-webkit-progress-bar {
+              background-color: rgba(255, 255, 255, 0.1);
+            }
+
+            &::-webkit-progress-value {
+              background-color: $style-primary;
+            }
+
+            &::-moz-progress-bar {
+              background-color: $style-primary;
+            }
+          }
+        }
+      }
+
+      .upload-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        padding: 1.5rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 0.3125rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover,
+        &.upload-area-drag {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        i {
+          font-size: 2rem;
+          opacity: 0.6;
+        }
+
+        p {
+          font-size: 1rem;
+          opacity: 0.8;
+        }
+      }
     }
   }
 </style>
@@ -267,9 +349,9 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import Markdown from './markdown'
+  import { FileListItem, FileTransfer } from '~/neko/types'
   import Content from './context.vue'
-  import { FileTransfer, FileListItem } from '~/neko/types'
+  import Markdown from './markdown'
 
   @Component({
     name: 'neko-files',

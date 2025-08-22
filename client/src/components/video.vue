@@ -63,80 +63,93 @@
 
 <style lang="scss" scoped>
   .video {
+    display: flex;
     width: 100%;
     height: 100%;
 
     .player {
-      position: absolute;
+      position: relative;
       display: flex;
+      flex: 1;
       justify-content: center;
       align-items: center;
       background: #000;
 
       .video-menu {
         position: absolute;
-        left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        left: 1.25rem;
+        z-index: 10;
 
         &.top {
-          top: 15px;
+          top: 1rem;
         }
 
         &.bottom {
-          bottom: 15px;
+          bottom: 1rem;
         }
 
         li {
-          margin: 0 0 10px 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           i {
-            width: 30px;
-            height: 30px;
-            background: rgba($color: #fff, $alpha: 0.2);
-            border-radius: 5px;
-            line-height: 30px;
-            font-size: 16px;
-            text-align: center;
-            color: rgba($color: #fff, $alpha: 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
             cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.3);
+              color: rgba(255, 255, 255, 0.8);
+            }
 
             &.faded {
-              color: rgba($color: $text-normal, $alpha: 0.4);
+              color: rgba($text-normal, 0.4);
             }
 
             &.disabled {
-              color: rgba($color: $style-error, $alpha: 0.4);
+              color: rgba($style-error, 0.4);
             }
           }
 
-          /* usually extra controls are only shown on mobile */
           &.extra-control {
             display: none;
           }
-          @media (max-width: 768px) {
-            &.extra-control {
-              display: inline-block;
-            }
-          }
 
-          &:last-child {
-            margin: 0;
+          @media (max-width: 48rem) {
+            &.extra-control {
+              display: flex;
+            }
           }
         }
       }
 
       .player-container {
         position: relative;
-        width: 100%;
+        display: flex;
+        flex: 1;
         max-width: calc(16 / 9 * 100dvh);
+        width: 100%;
 
         video {
           position: absolute;
-          top: 0;
-          bottom: 0;
+          inset: 0;
           width: 100%;
           height: 100%;
           display: flex;
           background: #000;
+          object-fit: contain;
 
           &::-webkit-media-controls {
             display: none !important;
@@ -146,23 +159,29 @@
         .player-overlay,
         .emotes {
           position: absolute;
-          top: 0;
-          bottom: 0;
-          width: 100%;
-          height: 100%;
+          inset: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           overflow: hidden;
         }
 
         .player-overlay {
-          background: rgba($color: #000, $alpha: 0.2);
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          background: rgba(0, 0, 0, 0.2);
           cursor: pointer;
+          transition: background-color 0.2s ease;
 
-          i::before {
-            font-size: 120px;
-            text-align: center;
+          &:hover {
+            background: rgba(0, 0, 0, 0.3);
+          }
+
+          i {
+            font-size: 7.5rem;
+            transition: transform 0.2s ease;
+
+            &:hover {
+              transform: scale(1.1);
+            }
           }
 
           &.hidden {
@@ -172,8 +191,7 @@
 
         .overlay {
           position: absolute;
-          top: 0;
-          bottom: 0;
+          inset: 0;
           width: 100%;
           height: 100%;
           cursor: default;
@@ -185,7 +203,8 @@
         }
 
         .player-aspect {
-          display: block;
+          display: flex;
+          width: 100%;
           padding-bottom: 56.25%;
         }
       }
@@ -194,13 +213,13 @@
 </style>
 
 <script lang="ts">
-  import { Component, Ref, Watch, Vue, Prop } from 'vue-property-decorator'
   import ResizeObserver from 'resize-observer-polyfill'
-  import { elementRequestFullscreen, onFullscreenChange, isFullscreen, lockKeyboard, unlockKeyboard } from '~/utils'
+  import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator'
+  import { elementRequestFullscreen, isFullscreen, lockKeyboard, onFullscreenChange, unlockKeyboard } from '~/utils'
 
+  import Clipboard from './clipboard.vue'
   import Emote from './emote.vue'
   import Resolution from './resolution.vue'
-  import Clipboard from './clipboard.vue'
 
   // @ts-ignore
   import GuacamoleKeyboard from '~/utils/guacamole-keyboard.ts'
@@ -791,7 +810,7 @@
         this._player.style.height = `${offsetHeight}px`
         this._container.style.maxWidth = `${(this.horizontal / this.vertical) * offsetHeight}px`
       } else {
-        this._player.style.height = `${9 * offsetWidth / 16}px`
+        this._player.style.height = `${(9 * offsetWidth) / 16}px`
         this._container.style.removeProperty('max-width')
       }
       this._aspect.style.paddingBottom = `${(this.vertical / this.horizontal) * 100}%`

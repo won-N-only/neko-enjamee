@@ -25,13 +25,22 @@
 
 <style lang="scss" scoped>
   ul {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
     li {
-      display: inline-block;
-      margin-right: 10px;
+      display: flex;
+      align-items: center;
 
       i {
-        font-size: 24px;
+        font-size: 1.5rem;
         cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: $text-normal;
+        }
       }
     }
   }
@@ -42,10 +51,12 @@
     border: 1px solid $background-primary;
     color: white;
     cursor: pointer;
-    border-radius: 5px;
-    height: 24px;
-    vertical-align: text-bottom;
-    display: inline-block;
+    border-radius: 0.25rem;
+    height: 2rem;
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
 
     option {
       font-weight: normal;
@@ -54,7 +65,13 @@
     }
 
     &:hover {
-      border: 1px solid $background-primary;
+      border-color: lighten($background-primary, 10%);
+      background-color: lighten($background-tertiary, 5%);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $text-link;
     }
   }
 </style>

@@ -180,18 +180,18 @@
 </style>
 
 <script lang="ts">
-  import { Vue, Component, Ref, Watch } from 'vue-property-decorator'
+  import { Component, Ref, Vue, Watch } from 'vue-property-decorator'
 
-  import Connect from '~/components/connect.vue'
-  import Video from '~/components/video.vue'
-  import Menu from '~/components/menu.vue'
-  import Side from '~/components/side.vue'
-  import Controls from '~/components/controls.vue'
-  import Members from '~/components/members.vue'
-  import Emotes from '~/components/emotes.vue'
   import About from '~/components/about.vue'
-  import Header from '~/components/header.vue'
-  import Unsupported from '~/components/unsupported.vue'
+import Connect from '~/components/connect.vue'
+import Controls from '~/components/controls.vue'
+import Emotes from '~/components/emotes.vue'
+import Header from '~/components/header.vue'
+import Members from '~/components/members.vue'
+import Menu from '~/components/menu.vue'
+import Side from '~/components/side.vue'
+import Unsupported from '~/components/unsupported.vue'
+import Video from '~/components/video.vue'
 
   @Component({
     name: 'neko',
@@ -225,7 +225,7 @@
     get isChatMode() {
       return !!new URL(location.href).searchParams.get('chat')
     }
-    
+
     get isEmbedMode() {
       return !!new URL(location.href).searchParams.get('embed')
     }
