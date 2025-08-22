@@ -14,6 +14,7 @@
 
   <img src="https://raw.githubusercontent.com/m1k1o/neko/master/docs/_media/intro.gif" width="650"/>
 </div>
+<img width="960" height="506" alt="image" src="https://github.com/user-attachments/assets/696de2c4-19f0-496c-a9db-97e37ff13368" />
 
 ## 🌟 주요 기능
 
