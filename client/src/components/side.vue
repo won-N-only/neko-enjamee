@@ -28,62 +28,72 @@
   .neko-menu {
     width: $side-width;
     background-color: $background-primary;
-    flex-shrink: 0;
-    max-height: 100%;
-    max-width: 100%;
+    flex: 0 0 auto;
+    height: 100%;
     display: flex;
     flex-direction: column;
 
     .tabs-container {
       background: $background-tertiary;
       height: $menu-height;
-      max-height: 100%;
-      max-width: 100%;
+      flex: 0 0 auto;
       display: flex;
-      flex-shrink: 0;
+      align-items: flex-end;
+      padding: 0 1rem;
 
       ul {
-        display: inline-block;
-        padding: 16px 0 0 0;
+        display: flex;
+        gap: 0.25rem;
+        width: 100%;
+        padding: 0.5rem 0 0 0;
 
         li {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
           background: $background-secondary;
-          border-radius: 3px 3px 0 0;
-          border-bottom: none;
-          display: inline-block;
-          padding: 5px 10px;
-          margin-right: 4px;
+          border-radius: 0.25rem 0.25rem 0 0;
+          padding: 0.5rem 0.75rem;
           font-weight: 600;
           cursor: pointer;
+          transition: background-color 0.2s ease;
 
           i {
-            margin-right: 4px;
-            font-size: 10px;
+            font-size: 0.875rem;
           }
 
           &.active {
             background: $background-primary;
+          }
+
+          &:hover:not(.active) {
+            background: lighten($background-secondary, 5%);
           }
         }
       }
     }
 
     .page-container {
-      max-height: 100%;
-      flex-grow: 1;
+      flex: 1;
       display: flex;
-      overflow: auto;
-      padding-top: 5px;
+      overflow: hidden;
+      padding: 0.5rem;
+
+      > * {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 </style>
 
 <script lang="ts">
-  import { Vue, Component, Watch } from 'vue-property-decorator'
+  import { Component, Vue, Watch } from 'vue-property-decorator'
 
-  import Settings from '~/components/settings.vue'
   import Chat from '~/components/chat.vue'
   import Files from '~/components/files.vue'
+  import Settings from '~/components/settings.vue'
 
   @Component({
     name: 'neko',

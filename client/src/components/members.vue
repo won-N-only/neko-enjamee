@@ -29,17 +29,17 @@
 
 <style lang="scss" scoped>
   .members {
+    display: flex;
     flex: 1;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: 14px;
+    padding: 0 0 0.875rem 0;
     scrollbar-width: thin;
     scrollbar-color: $background-secondary $background-tertiary;
-    min-height: 60px;
-    display: flex;
+    min-height: 3.75rem;
 
     &::-webkit-scrollbar {
-      height: 4px;
+      height: 0.25rem;
     }
 
     &::-webkit-scrollbar-track {
@@ -48,7 +48,7 @@
 
     &::-webkit-scrollbar-thumb {
       background-color: $background-secondary;
-      border-radius: 4px;
+      border-radius: 0.25rem;
     }
 
     &::-webkit-scrollbar-thumb:hover {
@@ -56,24 +56,33 @@
     }
 
     .members-container {
-      display: block;
-      clear: both;
-      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      padding: 0 1.25rem;
       margin: 0 auto;
 
       .members-list {
-        white-space: nowrap;
-        clear: both;
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
 
         li {
-          display: inline-block;
+          display: flex;
+          align-items: center;
 
           .member {
             position: relative;
-            display: block;
-            width: 50px;
-            height: 50px;
-            margin: 10px 5px 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3.125rem;
+            height: 3.125rem;
+            margin: 0.625rem 0.3125rem 0;
+            transition: transform 0.2s ease;
+
+            &:hover {
+              transform: scale(1.1);
+            }
 
             &.self {
               &::before {
@@ -83,71 +92,74 @@
                 background: $background-floating;
                 color: $style-primary;
                 position: absolute;
-                width: 15px;
-                height: 15px;
-                line-height: 15px;
-                font-size: 20px;
-                text-align: center;
-                margin-top: -2px;
-                margin-left: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 1rem;
+                height: 1rem;
+                font-size: 1.25rem;
+                top: -0.125rem;
+                right: -0.125rem;
                 border-radius: 50%;
               }
             }
 
             &.admin {
               &::before {
-                display: block;
                 font-family: 'Font Awesome 6 Free';
                 font-weight: 900;
                 content: '\f3ed';
                 color: $style-primary;
                 background: transparent;
                 position: absolute;
-                width: 14px;
-                height: 14px;
-                font-size: 14px;
-                text-align: center;
-                margin-top: -2px;
-                margin-left: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 0.875rem;
+                height: 0.875rem;
+                font-size: 0.875rem;
+                top: -0.125rem;
+                right: -0.5rem;
               }
             }
 
             &.host::after {
-              display: block;
               font-family: 'Font Awesome 6 Free';
               font-weight: 900;
               content: '\f521';
               background: $style-primary;
               color: $background-floating;
               position: absolute;
-              width: 20px;
-              height: 20px;
-              line-height: 20px;
-              font-size: 10px;
-              text-align: center;
-              margin-top: 42px;
-              margin-left: -18px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 1.25rem;
+              height: 1.25rem;
+              font-size: 0.625rem;
+              bottom: -0.625rem;
+              left: -1.125rem;
               border-radius: 50%;
             }
 
             .avatar {
+              width: 100%;
+              height: 100%;
               border-radius: 50%;
               overflow: hidden;
-              width: 100%;
             }
           }
 
           &:nth-child(2) {
-            margin-left: 20px;
+            position: relative;
+            margin-left: 1.25rem;
 
             &::before {
+              content: '';
               position: absolute;
-              content: ' ';
-              height: 45px;
-              width: 2px;
+              left: -0.75rem;
+              height: 2.8125rem;
+              width: 0.125rem;
               background: $background-secondary;
-              margin-top: 13px;
-              margin-left: -9px;
             }
           }
         }
@@ -159,8 +171,8 @@
 <script lang="ts">
   import { Component, Ref, Vue } from 'vue-property-decorator'
 
-  import Content from './context.vue'
   import Avatar from './avatar.vue'
+  import Content from './context.vue'
 
   @Component({
     name: 'neko-members',

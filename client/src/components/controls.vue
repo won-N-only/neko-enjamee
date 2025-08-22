@@ -108,13 +108,14 @@
 
   ul {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-    list-style: none;
+    gap: 1rem;
+    padding: 0.5rem;
 
     li {
-      font-size: 24px;
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
       cursor: pointer;
 
       &.no-pointer {
@@ -122,7 +123,11 @@
       }
 
       i {
-        padding: 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        transition: all 0.2s ease;
 
         &.faded {
           color: rgba($color: $text-normal, $alpha: 0.4);
@@ -131,68 +136,78 @@
         &.disabled {
           color: rgba($color: $style-error, $alpha: 0.4);
         }
+
+        &:hover:not(.disabled) {
+          transform: scale(1.1);
+        }
       }
 
       .volume {
-        white-space: nowrap;
-        display: block;
         display: flex;
-        flex-direction: row;
-        justify-content: center;
         align-items: center;
-        list-style: none;
+        gap: 0.5rem;
+        padding: 0 0.5rem;
+
+        i {
+          flex-shrink: 0;
+        }
 
         input[type='range'] {
-          width: 100%;
-          background: transparent;
-          width: 150px;
-          height: 20px;
+          flex: 1;
+          min-width: 8rem;
+          max-width: 10rem;
+          height: 1.25rem;
           -webkit-appearance: none;
+          background: transparent;
 
           &::-moz-range-thumb {
-            height: 12px;
-            width: 12px;
-            border-radius: 12px;
+            height: 0.75rem;
+            width: 0.75rem;
+            border-radius: 50%;
             background: #fff;
             cursor: pointer;
+            border: none;
           }
 
           &::-moz-range-track {
             width: 100%;
-            height: 4px;
+            height: 0.25rem;
             cursor: pointer;
             background: $style-primary;
-            border-radius: 2px;
+            border-radius: 0.125rem;
           }
 
           &::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 12px;
-            width: 12px;
-            border-radius: 12px;
+            height: 0.75rem;
+            width: 0.75rem;
+            border-radius: 50%;
             background: #fff;
             cursor: pointer;
-            margin-top: -4px;
+            margin-top: -0.25rem;
+            border: none;
           }
 
           &::-webkit-slider-runnable-track {
             width: 100%;
-            height: 4px;
+            height: 0.25rem;
             cursor: pointer;
             background: $style-primary;
-            border-radius: 2px;
+            border-radius: 0.125rem;
           }
         }
       }
 
       .switch {
-        margin: 0 5px;
-        display: block;
+        display: flex;
+        align-items: center;
         position: relative;
-        width: 42px;
-        height: 24px;
+        width: 2.625rem;
+        height: 1.5rem;
+        margin: 0 0.5rem;
 
         input[type='checkbox'] {
+          position: absolute;
           opacity: 0;
           width: 0;
           height: 0;
@@ -201,31 +216,29 @@
         span {
           position: absolute;
           cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
+          inset: 0;
           background-color: $background-secondary;
-          transition: 0.2s;
-          border-radius: 34px;
+          transition: all 0.2s ease;
+          border-radius: 2rem;
 
           &:before {
             color: $background-tertiary;
             font-weight: 900;
             font-family: 'Font Awesome 6 Free';
             content: '\f3c1';
-            font-size: 8px;
-            line-height: 18px;
-            text-align: center;
+            font-size: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: absolute;
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
+            height: 1.125rem;
+            width: 1.125rem;
+            left: 0.1875rem;
+            bottom: 0.1875rem;
             background-color: white;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
           }
         }
       }
@@ -236,7 +249,7 @@
 
           &:before {
             content: '\f023';
-            transform: translateX(18px);
+            transform: translateX(1.125rem);
           }
         }
 
@@ -252,7 +265,7 @@
 </style>
 
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
 
   @Component({ name: 'neko-controls' })
   export default class extends Vue {

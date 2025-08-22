@@ -1,5 +1,5 @@
-import md, { SingleNodeParserRule, HtmlOutputRule, defaultRules, State, Rules } from 'simple-markdown'
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import md, { defaultRules, HtmlOutputRule, Rules, SingleNodeParserRule, State } from 'simple-markdown'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 const { blockQuote, inlineCode, codeBlock, autolink, newline, escape, strong, text, link, url, em, u, br } =
   defaultRules

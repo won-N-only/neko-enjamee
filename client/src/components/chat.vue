@@ -40,18 +40,25 @@
     </ul>
     <neko-context ref="context" />
     <div class="chat-scroll-to-bottom">
-      <i class="fas fa-angle-double-down" @click="() => { _history.scrollTop = _history.scrollHeight }" />
+      <i
+        class="fas fa-angle-double-down"
+        @click="
+          () => {
+            _history.scrollTop = _history.scrollHeight
+          }
+        "
+      />
     </div>
     <div v-if="!muted" class="chat-send">
       <div class="accent" />
       <div class="text-container">
-        <textarea ref="input" :placeholder="$t('send_a_message')" @keydown="onKeyDown" v-model="content" />
+        <textarea ref="input" :placeholder="String($t('send_a_message'))" @keydown="onKeyDown" v-model.lazy="content" />
         <neko-emoji v-if="emoji" @picked="onEmojiPicked" @done="emoji = false" />
         <li>
           <i class="emoji-menu fas fa-laugh" @click.stop.prevent="onEmoji"></i>
         </li>
       </div>
-      <input ref="hinput" type="text"/>
+      <input ref="hinput" type="text" />
     </div>
   </div>
 </template>
@@ -152,124 +159,113 @@
     }
 
     .chat-scroll-to-bottom {
-      position: absolute;
-      bottom: 100px;
-      right: 20px;
-      z-index: 1;
+      position: fixed;
+      bottom: 5rem;
+      right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: $background-primary;
+      box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
       cursor: pointer;
-      color: $text-muted;
-      font-size: 20px;
-      transition: color 0.2s ease-in-out;
+      opacity: 0.8;
+      transition: all 0.2s ease;
+
+      i {
+        font-size: 1.25rem;
+      }
 
       &:hover {
-        color: $text-normal;
+        opacity: 1;
+        transform: translateY(-0.125rem);
       }
     }
 
     .chat-send {
       flex-shrink: 0;
-      height: 80px;
-      max-height: 80px;
-      padding: 0 10px 10px 10px;
-      flex-direction: column;
       display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background: $background-primary;
 
       .accent {
-        width: 100%;
-        height: 1px;
-        background: rgba($color: #fff, $alpha: 0.05);
-        margin: 5px 0 10px 0;
+        height: 0.0625rem;
+        background: rgba(255, 255, 255, 0.05);
       }
 
-      input {
-          height: 0;
-          opacity: 0;
-          font-size: 16px;
-          pointer-events: none;
-        }
-
       .text-container {
-        flex: 1;
-        width: 100%;
-        height: 100%;
-        background-color: rgba($color: #fff, $alpha: 0.05);
-        border-radius: 5px;
-        position: relative;
         display: flex;
-        
-        li {
-          display: inline-block;
-        }
-
-        .emoji-menu {
-          width: 20px;
-          height: 20px;
-          font-size: 20px;
-          margin: 8px 5px 0 0;
-          cursor: pointer;
-        }
-
-        .clear-button {
-          width: 20px;
-          height: 20px;
-          font-size: 20px;
-          margin: 8px 5px 0 0;
-          cursor: pointer;
-        }
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
 
         textarea {
           flex: 1;
-          font-family: $text-family;
-          border: none;
-          caret-color: $text-normal;
-          color: $text-normal;
+          font-size: 1rem;
+          line-height: 1.5;
+          padding: 0.5rem;
+          height: 2.5rem;
           resize: none;
-          margin: 5px;
-          background-color: transparent;
-          scrollbar-width: thin;
-          scrollbar-color: $background-tertiary transparent;
+          border: none;
+          background: transparent;
+          color: inherit;
+          overflow-y: hidden;
+          transition: height 0.2s ease;
+
+          &:focus {
+            height: auto;
+            overflow-y: auto;
+          }
 
           &::placeholder {
             color: $text-muted;
           }
-
-          &::-webkit-scrollbar {
-            width: 4px;
-          }
-
-          &::-webkit-scrollbar-track {
-            background-color: transparent;
-          }
-
-          &::-webkit-scrollbar-thumb {
-            background-color: $background-tertiary;
-            border-radius: 4px;
-          }
-
-          &::-webkit-scrollbar-thumb:hover {
-            background-color: $background-floating;
-          }
-
-          &::selection {
-            background: $text-link;
-          }
         }
 
+        li {
+          display: flex;
+          align-items: flex-start;
+          padding-top: 0.5rem;
+        }
+
+        .emoji-menu {
+          font-size: 1.25rem;
+          padding: 0.5rem;
+          cursor: pointer;
+          transition: transform 0.2s ease;
+          color: $text-muted;
+
+          &:hover {
+            transform: scale(1.1);
+            color: $text-normal;
+          }
+        }
+      }
+
+      input[type='text'] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
       }
     }
   }
 </style>
 
 <script lang="ts">
-  import { Component, Ref, Watch, Vue } from 'vue-property-decorator'
   import { formatRelative } from 'date-fns'
+  import { Component, Ref, Vue, Watch } from 'vue-property-decorator'
 
   import { Member } from '~/neko/types'
 
-  import Markdown from './markdown'
+  import Avatar from './avatar.vue'
   import Content from './context.vue'
   import Emoji from './emoji.vue'
-  import Avatar from './avatar.vue'
+  import Markdown from './markdown'
 
   const length = 512 // max length of message
 
@@ -305,15 +301,17 @@
 
     @Watch('history')
     onHistroyChange() {
-      this.$nextTick(() => {
-        if (this._history.scrollTop + this._history.clientHeight >= this._history.scrollHeight - 100) {
+      if (this._history && this._history.scrollTop + this._history.clientHeight >= this._history.scrollHeight - 100) {
+        this.$nextTick(() => {
           this._history.scrollTop = this._history.scrollHeight
-        }
+        })
+      }
 
-        if (this.history.length > 200) {
+      if (this.history.length > 200) {
+        this.$nextTick(() => {
           this.history.splice(0, this.history.length - 200)
-        }
-      })
+        })
+      }
     }
 
     @Watch('muted')
@@ -325,7 +323,9 @@
 
     mounted() {
       this.$nextTick(() => {
-        this._history.scrollTop = this._history.scrollHeight
+        if (this._history) {
+          this._history.scrollTop = this._history.scrollHeight
+        }
       })
     }
 
@@ -389,30 +389,24 @@
     }
 
     onKeyDown(event: KeyboardEvent) {
-      // Do nothing if user is muted by admin
       if (this.muted) {
         return
       }
 
-      // Workaround: ignore IME composing event
       if (event.isComposing || event.key === 'Process') {
         return
       }
 
       if (event.key === 'Enter' && !event.shiftKey) {
-        // Prevent enter keypress event
         event.preventDefault()
 
-        // Workaround: iOS IME CJK compositing buffer bug
         this._hinput.focus()
         this._input.focus()
 
-        // Check if text is empty
         if (this.content.length === 0) {
           return
         }
 
-        // Cut message if it's over limit and notify to user
         if (this.content.length > length) {
           this.content = this.content.substring(0, length)
           return
@@ -420,11 +414,10 @@
 
         this.$accessor.chat.sendMessage(this.content)
         this.content = ''
+
         this.$nextTick(() => {
           this._history.scrollTop = this._history.scrollHeight
         })
-
-        return
       }
     }
   }

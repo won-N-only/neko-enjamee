@@ -70,84 +70,107 @@
 
 <style lang="scss" scoped>
   .settings {
-    flex: 1;
     display: flex;
+    flex: 1;
+    padding: 1rem;
 
     ul {
-      flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 5px 20px;
+      width: 100%;
+      gap: 0.5rem;
 
       li {
         display: flex;
-        flex-direction: row;
-        align-content: center;
-        justify-content: center;
-        border-bottom: 1px solid $background-secondary;
-        padding: 5px 0;
-        white-space: nowrap;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 0.0625rem solid $background-secondary;
 
         &:last-child {
           border-bottom: none;
         }
 
+        &.broadcast {
+          flex-direction: column;
+          gap: 0.5rem;
+
+          div {
+            display: flex;
+            align-items: center;
+            width: 100%;
+          }
+        }
+
         span {
-          margin-right: auto;
-          height: 24px;
-          line-height: 24px;
+          flex: 1;
+          font-size: 0.875rem;
+          white-space: nowrap;
         }
 
         button {
-          cursor: pointer;
-          border-radius: 5px;
-          padding: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 2rem;
+          height: 2rem;
+          padding: 0 1rem;
+          border: none;
+          border-radius: 0.25rem;
           background: $style-primary;
           color: $text-normal;
-          text-align: center;
+          font-weight: 600;
           text-transform: uppercase;
-          font-weight: bold;
-          line-height: 30px;
-          margin: 5px 0;
-          border: none;
-          display: block;
-          width: 100%;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: lighten($style-primary, 5%);
+          }
+
+          &.btn-red {
+            background-color: $style-error;
+
+            &:hover {
+              background-color: lighten($style-error, 5%);
+            }
+          }
+
+          i {
+            font-size: 0.875rem;
+          }
         }
 
         .switch {
-          justify-self: flex-end;
           position: relative;
-          width: 42px;
-          height: 24px;
+          width: 2.625rem;
+          height: 1.5rem;
+          flex-shrink: 0;
 
           input {
-            opacity: 0;
             width: 0;
             height: 0;
+            opacity: 0;
           }
 
           span {
             position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background-color: $background-tertiary;
-            transition: 0.2s;
-            border-radius: 34px;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
 
             &:before {
-              position: absolute;
               content: '';
-              height: 18px;
-              width: 18px;
-              left: 3px;
-              bottom: 3px;
+              position: absolute;
+              left: 0.1875rem;
+              bottom: 0.1875rem;
+              width: 1.125rem;
+              height: 1.125rem;
               background-color: white;
-              transition: 0.3s;
               border-radius: 50%;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+              transition: transform 0.2s ease;
+              box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
             }
           }
         }
@@ -158,144 +181,128 @@
           }
 
           &:checked + span:before {
-            transform: translateX(18px);
+            transform: translateX(1.125rem);
           }
         }
 
         .slider {
-          white-space: nowrap;
-          max-width: 120px;
+          display: flex;
+          align-items: center;
+          width: 7.5rem;
+          flex-shrink: 0;
 
           input[type='range'] {
-            display: inline-block;
+            width: 100%;
+            height: 1.5rem;
             background: transparent;
             appearance: none;
-            height: 24px;
-            max-width: 120px;
-
-            &::-moz-range-thumb {
-              height: 12px;
-              width: 12px;
-              border-radius: 12px;
-              background: #fff;
-              cursor: pointer;
-            }
-
-            &::-moz-range-track {
-              width: 100%;
-              height: 4px;
-              cursor: pointer;
-              background: $style-primary;
-              border-radius: 2px;
-            }
 
             &::-webkit-slider-thumb {
               appearance: none;
-              height: 12px;
-              width: 12px;
-              border-radius: 12px;
-              background: #fff;
+              width: 0.75rem;
+              height: 0.75rem;
+              border-radius: 50%;
+              background: white;
               cursor: pointer;
-              margin-top: -4px;
+              margin-top: -0.25rem;
+              box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
             }
 
             &::-webkit-slider-runnable-track {
               width: 100%;
-              height: 4px;
-              cursor: pointer;
+              height: 0.25rem;
               background: $style-primary;
-              border-radius: 2px;
+              border-radius: 0.125rem;
+              cursor: pointer;
+            }
+
+            &::-moz-range-thumb {
+              width: 0.75rem;
+              height: 0.75rem;
+              border: none;
+              border-radius: 50%;
+              background: white;
+              cursor: pointer;
+              box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+            }
+
+            &::-moz-range-track {
+              width: 100%;
+              height: 0.25rem;
+              background: $style-primary;
+              border-radius: 0.125rem;
+              cursor: pointer;
             }
           }
         }
 
         .select {
-          max-width: 120px;
-          text-align: right;
-
-          select:hover {
-            border: 1px solid $background-secondary;
-          }
+          position: relative;
+          width: 7.5rem;
+          flex-shrink: 0;
 
           select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            display: block;
             width: 100%;
-            max-width: 100%;
-            height: 30px;
-            text-align: right;
-            padding: 0 5px 0 10px;
-            margin: 0;
-            line-height: 30px;
-            font-weight: bold;
-            font-size: 12px;
-            text-overflow: ellipsis;
-            border: 1px solid transparent;
-            border-radius: 5px;
-            color: white;
+            height: 1.875rem;
+            padding: 0 0.625rem;
+            border: 0.0625rem solid transparent;
+            border-radius: 0.25rem;
             background-color: $background-tertiary;
-            font-weight: lighter;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
             cursor: pointer;
+            appearance: none;
+            transition: border-color 0.2s ease;
+
+            &:hover {
+              border-color: $background-secondary;
+            }
 
             option {
-              font-weight: normal;
               color: $text-normal;
               background-color: $background-tertiary;
+              font-weight: normal;
             }
+          }
+
+          &::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0.625rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 0.75rem;
+            opacity: 0.6;
           }
         }
 
         .input {
-          display: block;
-          height: 30px;
-          text-align: right;
-          padding: 0 10px;
-          margin-left: 10px;
-          line-height: 30px;
-          text-overflow: ellipsis;
-          border: 1px solid transparent;
-          border-radius: 5px;
-          color: white;
+          width: 100%;
+          height: 2rem;
+          padding: 0 0.625rem;
+          border: 0.0625rem solid transparent;
+          border-radius: 0.25rem;
           background-color: $background-tertiary;
-          font-weight: lighter;
-          user-select: auto;
+          color: $text-normal;
+          font-size: 0.875rem;
+          transition: border-color 0.2s ease;
 
-          &::selection {
-            background: $text-normal;
+          &:hover,
+          &:focus {
+            border-color: $background-secondary;
           }
 
-          &[disabled] {
-            background: none;
-          }
-        }
-
-        &.broadcast {
-          display: flex;
-          flex-direction: column;
-
-          div {
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-
-            button {
-              flex-shrink: 1;
-              width: auto !important;
-              margin: 0;
-              padding: 0 10px;
-
-              &.btn-red {
-                background: #a62626;
-              }
-            }
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
           }
 
-          .input {
-            text-align: left;
-            width: auto !important;
-            margin: 0;
+          &::placeholder {
+            color: rgba($text-normal, 0.5);
           }
         }
       }
@@ -304,7 +311,7 @@
 </style>
 
 <script lang="ts">
-  import { Component, Watch, Vue } from 'vue-property-decorator'
+  import { Component, Vue, Watch } from 'vue-property-decorator'
 
   @Component({ name: 'neko-settings' })
   export default class extends Vue {

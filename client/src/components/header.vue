@@ -58,6 +58,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding: 0 10px;
+
+    @media (max-width: 768px) {
+      padding: 0 5px;
+    }
 
     .neko {
       flex: 1;
@@ -69,16 +74,31 @@
       color: $text-normal;
       text-decoration: none;
 
+      @media (max-width: 768px) {
+        margin-left: 10px;
+        width: auto;
+      }
+
       img {
         display: block;
         float: left;
         height: 30px;
         margin-right: 10px;
+
+        @media (max-width: 480px) {
+          height: 25px;
+          margin-right: 5px;
+        }
       }
 
       span {
         font-size: 30px;
         line-height: 30px;
+
+        @media (max-width: 480px) {
+          font-size: 24px;
+          line-height: 24px;
+        }
 
         b {
           font-weight: 900;
@@ -91,9 +111,17 @@
       margin-right: 10px;
       white-space: nowrap;
 
+      @media (max-width: 768px) {
+        margin-right: 5px;
+      }
+
       li {
         display: inline-block;
         margin-right: 10px;
+
+        @media (max-width: 480px) {
+          margin-right: 5px;
+        }
 
         i {
           display: block;
@@ -103,6 +131,13 @@
           line-height: 32px;
           border-radius: 3px;
           cursor: pointer;
+
+          @media (max-width: 480px) {
+            width: 25px;
+            height: 25px;
+            line-height: 27px;
+            font-size: 0.9em;
+          }
         }
 
         .disabled {
